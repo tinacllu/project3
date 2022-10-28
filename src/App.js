@@ -1,20 +1,21 @@
 // import styling
 import './styles/styles';
 import './App.css';
-import axios from 'axios';
 
 // import Components
 import Header from './Components/Header';
-import SubjectsForm from './Components/SubjectsForm';
+import SearchForm from './Components/SearchForm';
 import Papers from './Components/Papers';
+import ChangePage from './Components/ChangePage';
 
+//import hooks
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function App() {
   const [ publications, setPublications ] = useState([]);
-  // make state to store the userchoice 
-
   const [ queryParams, setQueryParams ] = useState('');
+  const [ numResults, setNumResults] = useState(1);
 
   const getQueryParams = (event, userChoice) => {
     event.preventDefault();
@@ -26,34 +27,42 @@ function App() {
     }
   }
 
+  const handleResultPages = (number) => {
+    console.log(number, 'from result pages son app page!')
+    setNumResults(number);
+    console.log(numResults)
+  }
+
   useEffect (() => {
-    axios({
+    if (queryParams !== 'placeholder' && queryParams !== '') {
+      console.log(queryParams);
+      axios({
         url: 'http://api.springernature.com/openaccess/json',
         params: {
           api_key:'d358a2b18c4f7efb5bf611352385eeaf',
-          q: `subject:${queryParams}`,
+          q:`(subject:${queryParams} AND language:"en")`,
           p: 10,
+          s: numResults,
         },
-    }).then((res) => {
-        console.log('api data has arrived!');
-        console.log(res);
-        console.log(res.data.records);
-        setPublications(res.data.records);
-    })
-    }, [queryParams]);
-    // call api on queryParams change
+      }).then((res) => {
+          console.log('api data has arrived!');
+          console.log(res);
+          console.log(res.data.records);
+          setPublications(res.data.records);
+      })
+    }
+  }, [queryParams, numResults]);
+  //also call api on numResults
 
 
   return (
-    <body>
+    <main>
       <Header />
-      <SubjectsForm getQueryParams={getQueryParams} /> 
-
-
+      <SearchForm getQueryParams={getQueryParams} /> 
       <Papers publications={publications} />
-      
-      <footer>Created by Tina Lu at <a href="#">Juno College</a></footer>
-    </body>
+      <ChangePage handleResultPages={handleResultPages}/>
+      <footer>Created by Tina Lu at <a href="https://junocollege.com/">Juno College</a></footer>
+    </main>
   );
 }
 

@@ -1,31 +1,40 @@
 import { useState } from 'react';
 import Abstract from './Abstract';
-// pass down title, authors, and abstract as props
+import Authors from './Authors';
+
 const Papers = (props) => {
     const [ displayAbstract, setDisplayAbstract ] = useState(false);
-    const handleClick = () => {
-        setDisplayAbstract(!displayAbstract);
+    const [ buttonId, setbuttonId ] = useState('');
+    const handleClick = (e) => {
+        if (buttonId === '' || buttonId !== e.target.parentElement.id) {
+            setbuttonId(e.target.parentElement.id);
+            setDisplayAbstract(true);
+        } else {
+            setbuttonId('')
+            setDisplayAbstract(false);
+        }
     }
     return(
-        
-
         <ul>
+            {/* show loading screen while api call is going on */}
             {/* add a message if the api search doesn't come back with anything */}
             {props.publications.map((publication) => {
                 return(
                     <li key={publication.doi}>
                         <h2>{publication.title}</h2>
-                        <p>authors</p>
-                        <button onClick={() => handleClick()}>
+                        <Authors publication={publication}/>
+                        <button id={publication.doi} onClick={(e) => handleClick(e)}>
                             {
-                                displayAbstract
-                                    ? <i className="fa-solid fa-chevron-up"></i>
-                                    : <i className="fa-solid fa-chevron-down"></i>
+                                !displayAbstract
+                                    ? <i className="fa-solid fa-chevron-down"></i>
+                                    : buttonId === publication.doi
+                                        ? <i className="fa-solid fa-chevron-up"></i>
+                                        : <i className="fa-solid fa-chevron-down"></i>
                             }
                             
                         </button>
                         {
-                            displayAbstract 
+                            buttonId === publication.doi
                                 ? <Abstract publication={publication}/>
                                 : null
                         }
@@ -35,7 +44,6 @@ const Papers = (props) => {
             {/* add ternary to show No results, if the passed props array is empty */}
             
         </ul>
-        
     )
 };
 

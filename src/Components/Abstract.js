@@ -1,12 +1,32 @@
 const Abstract = (props) => {
-    console.log(props.publication)
-    console.log(props.publication.url[0].value)
     return(
         <div>
-            {/* <p>{props.abstract[0].h1}</p> */}
-            {/* <p>{props.abstract.p}</p> */}
-            <a href={props.publication.url[0].value}>Full Text</a> 
-            {/* ternary for if no link, show link to full text not available */}
+            {
+                !props.publication.abstract.h1
+                    ? (<div className="abstractText">
+                            <h3>Abstract not available</h3>
+                        </div>)
+                    : typeof props.publication.abstract.p === "object"
+                        ? (<div className="abstractText">
+                            <h3>Abstract</h3>
+                            {
+                                props.publication.abstract.p.map((line)=> {
+                                    return(
+                                        <p>{line}</p>
+                                    )
+                                })
+                            }
+                        </div>)
+                        : (<div className="abstractText">
+                            <h3>Abstract</h3>
+                            <p>{props.publication.abstract.p}</p>
+                        </div>)
+            }
+            {
+                !props.publication.url[0].value
+                    ? <p>Link to full text not available. Please Google it using the DOI: {props.publication.doi}</p>
+                    : <a href={props.publication.url[0].value}>Full Text</a> 
+            }
         </div>
     )
 }
