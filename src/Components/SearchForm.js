@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const SearchForm = (props) => {
+const SearchForm = ( {getQueryParams, setShowLoading, setLandingPage} ) => {
 
     const [ userChoice, setUserChoice ] = useState('placeholder');
     const handleUserChoice = (e) => {
@@ -8,7 +8,7 @@ const SearchForm = (props) => {
     }
 
     return(
-        <form onSubmit={(event) => props.getQueryParams(event, userChoice)}>
+        <form onSubmit={(event) => {getQueryParams(event, userChoice); setShowLoading(true); setLandingPage(false)}}>
             <label htmlFor="subjects" hidden>Subjects</label>
             <select onChange={handleUserChoice} name="subjects" id="subjects" value={userChoice}>
                 <option value="placeholder" disabled>Select a subject</option>

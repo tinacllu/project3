@@ -16,6 +16,8 @@ function App() {
   const [ publications, setPublications ] = useState([]);
   const [ queryParams, setQueryParams ] = useState('');
   const [ numResults, setNumResults] = useState(1);
+  const [ showLoading, setShowLoading ] = useState(false);
+  const [ landingPage, setLandingPage ] = useState(true);
 
   const getQueryParams = (event, userChoice) => {
     event.preventDefault();
@@ -28,9 +30,8 @@ function App() {
   }
 
   const handleResultPages = (number) => {
-    console.log(number, 'from result pages son app page!')
     setNumResults(number);
-    console.log(numResults)
+    setShowLoading(true);
   }
 
   useEffect (() => {
@@ -45,22 +46,33 @@ function App() {
           s: numResults,
         },
       }).then((res) => {
-          console.log('api data has arrived!');
-          console.log(res);
           console.log(res.data.records);
           setPublications(res.data.records);
+          setShowLoading(false);
       })
     }
   }, [queryParams, numResults]);
-  //also call api on numResults
-
 
   return (
     <main>
       <Header />
-      <SearchForm getQueryParams={getQueryParams} /> 
-      <Papers publications={publications} />
-      <ChangePage handleResultPages={handleResultPages}/>
+      <SearchForm getQueryParams={getQueryParams} setShowLoading={setShowLoading} setLandingPage={setLandingPage}/> 
+      {
+        showLoading
+          ? <p>Loading</p>
+          : <Papers publications={publications} />
+      }
+      
+      {
+        landingPage 
+          ? null
+          : (numResults === 1 && publications.length===0)
+            ? showLoading
+                ? null
+                : <p>No results</p>
+            : <ChangePage handleResultPages={handleResultPages} publications={publications}/>
+      }
+      
       <footer>Created by Tina Lu at <a href="https://junocollege.com/">Juno College</a></footer>
     </main>
   );
