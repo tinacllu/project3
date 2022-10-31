@@ -1,0 +1,22 @@
+@use './variables' as *;
+
+.wrapper {
+    margin: 0 auto;
+    width: 90%;
+    max-width: 1400px;
+}
+
+html {
+    background-color: $darkBlue;
+}
+
+ul {
+    list-style: none;
+}
+
+button {
+    all: unset;
+    background-color: $lightBlue;
+    border-radius: 5px;
+    padding: 5px 10px;
+}

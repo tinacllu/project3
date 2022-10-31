@@ -1,5 +1,8 @@
 @use './partials/variables' as *;
+@use './partials/typography'; 
+@use './partials/baseStyles';
 
-.App {
-    background-color: $pink;
-}
+@use './partials/papers';
+@use './partials/footer';
+
+

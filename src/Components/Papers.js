@@ -17,7 +17,7 @@ const Papers = (props) => {
     }
 
     return(
-        <ul>
+        <ul className='paperContainer'>
             {props.publications.map((publication) => {
                 return(
                     <li key={publication.doi}>

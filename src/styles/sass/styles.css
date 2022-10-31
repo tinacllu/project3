@@ -1,3 +1,32 @@
-.App {
-  background-color: lightpink;
+.wrapper {
+  margin: 0 auto;
+  width: 90%;
+  max-width: 1400px;
+}
+
+html {
+  background-color: #204378;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  all: unset;
+  background-color: #6DB1BF;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.paperContainer li {
+  background-color: white;
+  border-radius: 10px;
+  color: #2e3136;
+}
+
+footer {
+  background-color: #FEFFFF;
+  text-align: center;
+  color: #204378;
 }/*# sourceMappingURL=styles.css.map */
