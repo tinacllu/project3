@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Abstract from './Abstract';
 import Authors from './Authors';
+import Favourite from './Favourite';
 
 const Papers = (props) => {
     const [ displayAbstract, setDisplayAbstract ] = useState(false);
@@ -14,15 +15,16 @@ const Papers = (props) => {
             setDisplayAbstract(false);
         }
     }
+
     return(
         <ul>
-            {/* show loading screen while api call is going on */}
-            {/* add a message if the api search doesn't come back with anything */}
             {props.publications.map((publication) => {
                 return(
                     <li key={publication.doi}>
                         <h2>{publication.title}</h2>
+                        <Favourite handleLike={props.handleLike} publication={publication}/>
                         <Authors publication={publication}/>
+                        <p>Publication Year: {publication.publicationDate.substring(0,4)}</p>
                         <button id={publication.doi} onClick={(e) => handleClick(e)}>
                             {
                                 !displayAbstract
@@ -40,9 +42,7 @@ const Papers = (props) => {
                         }
                     </li>
                 )
-            })}
-            {/* add ternary to show No results, if the passed props array is empty */}
-            
+            })}    
         </ul>
     )
 };

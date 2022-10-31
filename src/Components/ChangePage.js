@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const ChangePage = ( {handleResultPages, publications} ) => {
+const ChangePage = ( {handleResultPages, publications, searched} ) => {
     const [ number, setNumber ] = useState(11);
 
+    useEffect(() => {
+        if (searched) {
+            setNumber(11);
+        }
+    }, [searched])
     return(
         <>
             {
