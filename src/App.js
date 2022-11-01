@@ -1,14 +1,12 @@
 // import styling
-import './App.css';
-import logo from './assets/logo.png';
+import './App.scss';
+import logo from './assets/logoAltEdit.png';
 
 // import Components
-import SearchForm from './Components/SearchForm';
-import Papers from './Components/Papers';
-import ChangePage from './Components/ChangePage';
 import SearchPage from './Components/SearchPage';
 import FavouritePage from './Components/FavouritePage';
 import SavedPage from './Components/SavedPage'
+import Error404 from './Components/Error404';
 
 // config
 import firebaseConfig from './Components/Firebase';
@@ -17,13 +15,11 @@ import firebaseConfig from './Components/Firebase';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getDatabase, ref, onValue, push, remove} from 'firebase/database';
-import { Link, Routes, Route, Outlet } from 'react-router-dom';
+import { Link, Routes, Route } from 'react-router-dom';
 
 function App() {
   const [ publications, setPublications ] = useState([]);
-  // const [ queryParams, setQueryParams ] = useState('');
   const [ apiQuery, setApiQuery ] = useState('');
-  // const [ advancedParams, setAdvancedParams ] = useState({});
   const [ numResults, setNumResults] = useState(1);
   const [ newSearch, setNewSearch ] = useState(false);
   const [ showLoading, setShowLoading ] = useState(false);
@@ -133,16 +129,18 @@ function App() {
     <>
     <main>
       <header className='wrapper'>
-        <div className='h1Container'>
+        <Link className='h1Container' to='/'>
           <div className='logoContainer'>
-            <img src={logo} alt='' />
+            <img src={logo} alt='line art of atom' />
           </div>
           <h1>SciLib</h1>
+        </Link>
+        
+        <div className="about">
+          <p>Welcome to SciLib - a library to browse and save your favourite scientific literature from Springer Open Access! To get started, simply select a subject of interest from the dropdown menu to see recent papers related to that subject. For more specific searches, the Advanced Search option is available. </p>
+          {/* <p>If you would like to curate a personal favourites list, please login or sign up.</p> */}
         </div>
         
-        <p>Welcome to SciLib - a library to browse and save your favourite scientific literature! For casual browsing, simply select a subject of interest from the dropdown menu to see recent papers related to that subject. For more specific searches, use the Advanced Search option. </p>
-        {/* <p>If you would like to curate a personal favourites list, please login or sign up.
-        </p> */}
       </header>
 
       <section className='wrapper'>
@@ -159,58 +157,28 @@ function App() {
             <i className='fa-solid fa-bookmark'></i>
             <h3>Saved</h3>
           </Link>
-          {/* <div className="page searchPage" >
-            <i className="fa-solid fa-magnifying-glass"></i>
-            <h3>Search</h3>
-          </div> 
-          <div className="page favouritePage">
-            <i className="fa-solid fa-heart"></i>
-            <h3>Favourites</h3>
-          </div>
-          <div className="page savedPage">
-            <i className='fa-solid fa-bookmark'></i>
-            <h3>Saved</h3>
-          </div> */}
         </div>
       </section>
 
       <Routes>
-        <Route path='/' element={<SearchPage 
+        <Route path='/' element={ <SearchPage 
           getQueryParams={getQueryParams} 
           setLandingPage={setLandingPage} 
           publications={publications} 
           handleLike={handleLike} 
           handleResultPages={handleResultPages} 
+          setNewSearch={setNewSearch}
           newSearch={newSearch} 
           numResults={numResults} 
           showLoading={showLoading} 
           landingPage={landingPage}
-          apiQuery={apiQuery}/>} />
-        <Route path='/favourites' element={<FavouritePage />} />
-        <Route path='/saved' element={<SavedPage/>} />
+          apiQuery={apiQuery}/> } />
+        <Route path='/favourites' element={ <FavouritePage /> } />
+        <Route path='/saved' element={ <SavedPage /> } />
+        <Route path='*' element={ <Error404 /> } />
       </Routes>
-
-      {/* <SearchPage getQueryParams={getQueryParams} setLandingPage={setLandingPage} publications={publications} handleLike={handleLike} handleResultPages={handleResultPages} newSearch={newSearch} numResults={numResults} showLoading={showLoading} landingPage={landingPage}/> */}
-      {/* <section className='search wrapper'>
-        <SearchForm getQueryParams={getQueryParams} setLandingPage={setLandingPage}/> 
-        {
-          showLoading
-            ? <p>Loading</p>
-            : <Papers publications={publications} handleLike={handleLike}/>
-        }
-        
-        {
-          landingPage 
-            ? null
-            : (numResults === 1 && publications.length===0)
-              ? showLoading
-                  ? null
-                  : <p>No results</p>
-              : <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
-        }
-      </section> */}
     </main>
-    <footer>Created by Tina Lu at <a href='https://junocollege.com/'>Juno College</a></footer>
+    <footer>Created by <a href='https://www.tinalu.ca/'>Tina Lu</a> at <a href='https://junocollege.com/'>Juno College</a></footer>
     </>
   );
 }

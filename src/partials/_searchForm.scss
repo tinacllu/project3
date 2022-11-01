@@ -10,8 +10,11 @@
         label{
             padding: 10px 0;
         }
-        select, input {
+        select, input{
             height: 42px; 
+        }
+        input {
+            margin-bottom: 10px;
         }
     }
     
@@ -23,6 +26,9 @@
             padding: 0;
             height: 45px; 
             align-self: flex-end;
+            &:hover, &:focus {
+                outline: 3px solid $white;
+            }
         }
     }
     
@@ -34,6 +40,9 @@
             height: 42px;
             width: 150px;
             padding: 0;
+            &:hover, &:focus {
+                outline: 3px solid $white;
+            }
         }
     }
     
@@ -45,6 +54,9 @@
         width: 30%;
         min-width: fit-content;
         margin: 20px 0;
+        &:hover, &:focus {
+            outline: 3px solid $white;
+        }
         i {
             padding-left: 15px;
         }

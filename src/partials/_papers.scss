@@ -47,7 +47,7 @@
     }
     .button {
         text-decoration: none;
-        background-color: $pink;
+        background-color: $darkGray;
         width: 125px;
         margin: 20px 0;
         display: flex;
@@ -55,7 +55,10 @@
         align-items: center;
         height: 25px;
         &:hover, &:focus {
-           background-color: $pink;
+            background-color: $white;
+            outline: 3px solid $darkGray;
+            color: $darkGray;
+            transform: scale(1.01);
         }
         i {
             margin-left: 10px;
@@ -72,6 +75,9 @@
     gap: calc(100% - (2 * 170px));
     .prev, .next{
         min-width: 140px;
+        &:hover, &:focus {
+            outline: 3px solid $white;
+        }
     }
     .end {
         width: 170px;

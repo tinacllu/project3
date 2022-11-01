@@ -7,18 +7,20 @@ header {
     color: $white;
     .h1Container {
         display: flex;
-        width: 100%;
+        width: fit-content;
         align-items: center;
         margin-top: 25px;
         h1 {
-            
             margin-left: 25px;
         }
         .logoContainer {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 10%;
+            width: 25%;
         }
+    }
+    .about {
+        margin: 15px 0;
     }
 }

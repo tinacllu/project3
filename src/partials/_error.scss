@@ -1,0 +1,41 @@
+@use './variables' as *;
+
+.errorPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $darkBlue;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    h2 {
+        padding: 0;
+        font-size: 10rem;
+    }
+    p {
+        font-size: 1.5rem;
+    }
+    .textContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        .button {
+            background-color: $lightBlue;
+            color: $darkGray;
+            font-size: 1.5rem;
+            margin: 20px;
+            &:hover, &:focus {
+                outline: 3px solid $white;
+                background-color: $pink;
+            }
+        }
+    }
+    .imgContainer {
+        height: 18rem;
+        margin-left: 100px;
+
+    }
+}

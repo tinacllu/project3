@@ -8,6 +8,9 @@
     max-width: 1400px;
 }
 
+main {
+    min-height: calc(100vh - 30px);
+}
 img {
     display: block;
     width:100%;
@@ -46,5 +49,13 @@ input, option, select {
     border-radius: 25px;
     outline: none;
     border: none;
+    transition: 0.3s;
+    &:hover, &:focus {
+        box-shadow: 0px 0px 5px 4px rgba($darkBlue, 0.25);
+    }
 }
 
+a {
+    text-decoration: none;
+    color: $white;
+}

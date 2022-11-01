@@ -13,8 +13,10 @@ const ChangePage = ( {handleResultPages, publications, newSearch, numResults} ) 
             }
 
             {
-                publications.length < 10
-                    ? <p className="end">End of results</p>
+                (publications.length < 10)
+                    ? numResults === 1
+                        ? null
+                        : <p className="end">End of results</p>
                     : (
                         <button className="next" onClick={() => handleResultPages(true)}>
                             Next Page

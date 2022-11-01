@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const SearchForm = ( {getQueryParams, setLandingPage} ) => {
+const SearchForm = ( {getQueryParams, setLandingPage, setNewSearch} ) => {
 
     const [ showForm, setShowForm ] = useState(false);
     const [ userInput, setUserInput ] = useState({subject: '', title: '', year: '', name: '', doi: ''});
@@ -56,7 +56,7 @@ const SearchForm = ( {getQueryParams, setLandingPage} ) => {
                     <button type='submit'>Search</button>
                 </form>
 
-                <button className='toggleSearch' onClick={() => {setShowForm(!showForm); setSubject('placeholder')}}>
+                <button className='toggleSearch' onClick={() => {setShowForm(!showForm); setSubject('placeholder'); setNewSearch(false)}}>
                     <p>Show Advanced Search</p>
                     <i className='fa-solid fa-chevron-down'></i>
                 </button>
@@ -64,7 +64,7 @@ const SearchForm = ( {getQueryParams, setLandingPage} ) => {
             )
             : (
                 <>
-                <button className='toggleSearch' onClick={() => {setShowForm(!showForm); resetAdvancedParams()}}>
+                <button className='toggleSearch' onClick={() => {setShowForm(!showForm); resetAdvancedParams(); setNewSearch(false)}}>
                     <p>Show Basic Search</p>
                     <i className='fa-solid fa-chevron-up'></i>
                 </button>

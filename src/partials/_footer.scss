@@ -1,18 +1,16 @@
 @use './variables' as *;
 
 footer {
-    background-color: $white;
     text-align: center;
-    color:$darkGray;
+    color:$white;
     padding: 5px;
     width: 100%;
+    height: 30px;
+    font-weight: lighter;
     a {
-        text-decoration: none;
-        color: $darkGray;
         transition: 0.5s;
         &:hover, &:focus {
             text-decoration: underline;
-            color: $darkBlue;
         }
     }
 }
