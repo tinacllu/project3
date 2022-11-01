@@ -1,0 +1,56 @@
+@use './variables' as *;
+
+.searchForms {
+    width: 90%;
+    margin: 0 auto;
+    .searchParam {
+        display: flex;
+        flex-direction: column;
+        width: 45%;
+        label{
+            padding: 10px 0;
+        }
+        select, input {
+            height: 42px; 
+        }
+    }
+    
+    .basicSearch {
+        display: flex;
+        gap: 10px;
+        button {
+            width: 150px;
+            padding: 0;
+            height: 45px; 
+            align-self: flex-end;
+        }
+    }
+    
+    .advancedSearch {
+        display: flex;
+        flex-direction: column;
+        button {
+            margin: 20px 0;
+            height: 42px;
+            width: 150px;
+            padding: 0;
+        }
+    }
+    
+    .toggleSearch {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0px 25px;
+        width: 30%;
+        min-width: fit-content;
+        margin: 20px 0;
+        i {
+            padding-left: 15px;
+        }
+    }
+}
+
+.messageContainer {
+    width: 90%;
+}

@@ -1,13 +1,13 @@
 const Abstract = (props) => {
     return(
-        <div>
+        <div className='abstractContainer'>
             {
                 !props.publication.abstract.h1
-                    ? (<div className="abstractText">
+                    ? (<div className='abstractText'>
                             <h3>Abstract not available</h3>
                         </div>)
-                    : typeof props.publication.abstract.p === "object"
-                        ? (<div className="abstractText">
+                    : typeof props.publication.abstract.p === 'object'
+                        ? (<div className='abstractText'>
                             <h3>Abstract</h3>
                             {
                                 props.publication.abstract.p.map((line)=> {
@@ -17,7 +17,7 @@ const Abstract = (props) => {
                                 })
                             }
                         </div>)
-                        : (<div className="abstractText">
+                        : (<div className='abstractText'>
                             <h3>Abstract</h3>
                             <p>{props.publication.abstract.p}</p>
                         </div>)
@@ -25,7 +25,10 @@ const Abstract = (props) => {
             {
                 !props.publication.url[0].value
                     ? <p>Link to full text not available. Please Google it using the DOI: {props.publication.doi}</p>
-                    : <a href={props.publication.url[0].value}>Full Text</a> 
+                    : (<a className='button' href={props.publication.url[0].value}>
+                        <p>Full Text</p>
+                        <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>) 
             }
         </div>
     )

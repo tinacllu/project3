@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Favourite = ( {handleLike, publication} ) => {
+const HeartIcon = ( {handleLike, publication} ) => {
     const [ liked, setLiked ] = useState(false);
 
     return(
@@ -14,4 +14,4 @@ const Favourite = ( {handleLike, publication} ) => {
     )
 }
 
-export default Favourite;
+export default HeartIcon;

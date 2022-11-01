@@ -1,21 +1,12 @@
-import { useState, useEffect } from 'react';
+const ChangePage = ( {handleResultPages, publications, newSearch, numResults} ) => {
 
-const ChangePage = ( {handleResultPages, publications, searched} ) => {
-    const [ number, setNumber ] = useState(11);
-
-    useEffect(() => {
-        if (searched) {
-            setNumber(11);
-        }
-    }, [searched])
     return(
-        <>
+        <div className='pageButtons'>
             {
-                number > 11 
+                numResults > 1 
                     ?(
-                        <button onClick={() => {setNumber(number - 10); handleResultPages(number)}}>
+                        <button className="prev" onClick={() => handleResultPages(false)}>
                             Previous Page
-                            {number}
                         </button>
                     )
                     :null
@@ -23,16 +14,14 @@ const ChangePage = ( {handleResultPages, publications, searched} ) => {
 
             {
                 publications.length < 10
-                    ? <p>End of results</p>
+                    ? <p className="end">End of results</p>
                     : (
-                        <button onClick={() => {setNumber(number + 10); handleResultPages(number)}}>
+                        <button className="next" onClick={() => handleResultPages(true)}>
                             Next Page
-                            {number}
                         </button>
                     )
-
             }
-        </>
+        </div>
     )
 }
 

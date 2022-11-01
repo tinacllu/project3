@@ -7,12 +7,10 @@ const Authors = (props) => {
 
     return(
         <>
-            <p>Authors: 
-                <span>
-                    {
-                        ` ${authorArray.join(', ')}`
-                    }  
-                </span>
+            <p><span className='bold'>Authors:</span>
+                {
+                    ` ${authorArray.join(', ')}`
+                }  
             </p>
         </>
         

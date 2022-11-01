@@ -1,0 +1,50 @@
+@use './variables' as *;
+
+// loading https://codepen.io/kathykato/pen/YzKGrqd
+
+.wrapper {
+    margin: 0 auto;
+    width: 90%;
+    max-width: 1400px;
+}
+
+img {
+    display: block;
+    width:100%;
+    height: 100%;
+}
+
+html {
+    background-color: $darkBlue;
+    min-height: 100vh;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+button, .button {
+    all: unset;
+    background-color: $darkGray;
+    color: $white;
+    border-radius: 25px;
+    padding: 10px 15px;
+    text-align: center;
+    transition: 0.3s;
+    &:hover, &:focus {
+        cursor: pointer;
+        transform: scale(1.05);
+    }
+}
+
+input, option, select {
+    background-color: $white;
+    color: $darkGray;
+    padding: 10px 15px;
+    border-radius: 25px;
+    outline: none;
+    border: none;
+}
+
