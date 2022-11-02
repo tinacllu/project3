@@ -1,4 +1,5 @@
 @use './variables' as *;
+@use './mixins' as *;
 
 // Loading animation adapted from Dylan Macnab https://codepen.io/DylanMacnab/pen/MeBGWz
 
@@ -19,6 +20,11 @@
     background: $darkGray;
     border-radius: 50%;
     margin: 10px;
+    @include mobile {
+        height: 7px;
+        width: 7px;
+        margin: 7px;
+    }
 
     animation-name: scaleUp;
     animation-duration: 1s;
