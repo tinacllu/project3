@@ -79,7 +79,7 @@ function App() {
     if (apiQuery) {
       setShowLoading(true);
       axios({
-        url: 'http://api.springernature.com/openaccess/json',
+        url: 'https://api.springernature.com/openaccess/json',
         params: {
           api_key:'d358a2b18c4f7efb5bf611352385eeaf',
           // api_key:'b1d9463d9bc800cb5d5134b95771983c',
@@ -88,10 +88,11 @@ function App() {
           s: numResults,
         },
       }).then((res) => {
-          setPublications(res.data.records);
-          setShowLoading(false);
+        setPublications(res.data.records);
+        setShowLoading(false);
       }).catch(() => {
-        alert('Oh no - something went wrong! Please try again later :( ')
+        alert('Oh no - something went wrong! Please try again later :( ');
+        setShowLoading(true);
       });
     } 
   }, [apiQuery, numResults]);
