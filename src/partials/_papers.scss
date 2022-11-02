@@ -1,4 +1,5 @@
 @use './variables' as *;
+@use './mixins' as *;
 
 .paperContainer {
     display: flex;
@@ -19,6 +20,9 @@
     }
     p {
         padding: 5px 0;
+        @include mobile {
+            font-size: 0.875rem;
+        }
     }
 }
 
@@ -44,6 +48,9 @@
     flex-direction: column;
     .abstractText {
         text-align:justify;
+        @include mobile {
+            text-align: left;
+        }
     }
     .button {
         text-decoration: none;
@@ -54,6 +61,11 @@
         justify-content: center;
         align-items: center;
         height: 25px;
+        @include mobile {
+            font-size: 0.875rem;
+            width: 80px;
+            padding: 5px 10px;
+        }
         &:hover, &:focus {
             background-color: $white;
             outline: 3px solid $darkGray;
@@ -73,10 +85,22 @@
     width: 90%;
     margin: 15px auto;
     gap: calc(100% - (2 * 170px));
+    @include mobile {
+        gap: calc(100% - (2 * 80px));
+    }
     .prev, .next{
         min-width: 140px;
+        @include mobile {
+            font-size: 1rem;
+            min-width: 50px;
+        }
         &:hover, &:focus {
             outline: 3px solid $white;
+        }
+        .long {
+            @include mobile {
+                display: none;
+            }
         }
     }
     .end {

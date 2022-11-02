@@ -29,9 +29,9 @@ const SearchForm = ( {getQueryParams, setLandingPage, setNewSearch} ) => {
             ? (
                 <>
                 
-                <form className='basicSearch' onSubmit={(event) => {getQueryParams(event, userInput); setLandingPage(false)}}>
+                <form className='basicSearch' onSubmit={(event) => {getQueryParams(event, userInput)}}>
                     <div className='searchParam'>
-                       <label htmlFor='subjects'>Select your subject of interest:</label>
+                        <label htmlFor='subjects'>Select your subject of interest:</label>
                         <select onChange={(e) => setSubject(e.target.value)} name='subjects' id='subjects' value={subject}>
                             <option value='placeholder' disabled>Select a subject</option>
                             <option value='Anatomy'>Anatomy</option>
@@ -68,7 +68,7 @@ const SearchForm = ( {getQueryParams, setLandingPage, setNewSearch} ) => {
                     <p>Show Basic Search</p>
                     <i className='fa-solid fa-chevron-up'></i>
                 </button>
-                <form className='advancedSearch' onSubmit={(event) => {getQueryParams(event, userInput); setLandingPage(false)}}>
+                <form className='advancedSearch' onSubmit={(event) => {getQueryParams(event, userInput)}}>
                     <div className='searchParam'>
                        <label htmlFor='title'>Title:</label>
                         <input type='text' id='title' placeholder='Title' onChange={(e) => {setTitle(e.target.value)}}></input> 

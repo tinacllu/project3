@@ -1,4 +1,5 @@
 @use './variables' as *;
+@use './mixins' as *;
 
 .searchForms {
     width: 90%;
@@ -7,11 +8,23 @@
         display: flex;
         flex-direction: column;
         width: 45%;
+        @include desktop {
+            width: 60%;
+        }
+        @include tablet {
+            width: 80%;
+        }
+        @include mobile {
+            width: 100%;
+        }
         label{
             padding: 10px 0;
         }
         select, input{
             height: 42px; 
+            @include mobile {
+                font-size: 0.875rem;
+            }
         }
         input {
             margin-bottom: 10px;
@@ -21,11 +34,17 @@
     .basicSearch {
         display: flex;
         gap: 10px;
+        @include mobile {
+            flex-direction: column;
+        }
         button {
             width: 150px;
             padding: 0;
             height: 45px; 
             align-self: flex-end;
+            @include mobile {
+                align-self: flex-start;
+            }
             &:hover, &:focus {
                 outline: 3px solid $white;
             }
@@ -54,8 +73,27 @@
         width: 30%;
         min-width: fit-content;
         margin: 20px 0;
+        @include mobile {
+            background-color: $white;
+            color: $darkGray;
+            margin: 30px 0;
+            width: 100%;
+            padding: 0;
+            height: 42px;
+            p{
+                padding-left: 20px;
+                font-size: 0.875rem;
+            }
+            i {
+                padding-right: 20px;
+            }
+            
+        }
         &:hover, &:focus {
             outline: 3px solid $white;
+            @include mobile {
+                outline: 3px solid $darkGray;
+            }
         }
         i {
             padding-left: 15px;

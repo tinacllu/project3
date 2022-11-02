@@ -14,7 +14,7 @@ import firebaseConfig from './Components/Firebase';
 //import npm modules
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getDatabase, ref, onValue, push, remove} from 'firebase/database';
+import { getDatabase, ref, onValue, push} from 'firebase/database';
 import { Link, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -23,7 +23,6 @@ function App() {
   const [ numResults, setNumResults] = useState(1);
   const [ newSearch, setNewSearch ] = useState(false);
   const [ showLoading, setShowLoading ] = useState(false);
-  const [ landingPage, setLandingPage ] = useState(true);
   const [ loginCreds, setLoginCreds ] = useState(['demo', 'demo123']);
   // const [ favList, setFavList ] = useState([]);
   // const [ savedList, setSavedList ] = useState([]);
@@ -78,8 +77,6 @@ function App() {
 
   // call the API based on user input
   useEffect (() => {
-    console.log(apiQuery);
-   
     if (apiQuery) {
       setShowLoading(true);
       axios({
@@ -87,8 +84,6 @@ function App() {
         params: {
           api_key:'d358a2b18c4f7efb5bf611352385eeaf',
           // api_key:'b1d9463d9bc800cb5d5134b95771983c',
-          // q:`(subject:${queryParams} AND language:'en')`,
-          // q:`(title: 'congenital' AND language:'en' AND year:'2018' AND name:'li' AND doi:'10.1186/s12902-018-0307-6')`,
           q: `${apiQuery}`,
           p: 10,
           s: numResults,
@@ -137,7 +132,8 @@ function App() {
         </Link>
         
         <div className="about">
-          <p>Welcome to SciLib - a library to browse and save your favourite scientific literature from Springer Open Access! To get started, simply select a subject of interest from the dropdown menu to see recent papers related to that subject. For more specific searches, the Advanced Search option is available. </p>
+          <p>Welcome to SciLib - a library to browse and save your favourite scientific literature from Springer Open Access! To get started, simply select a subject of interest from the dropdown menu to see recent papers related to that subject. To find a specific paper, try the Advanced Search option. </p>
+          <p>Happy reading!</p>
           {/* <p>If you would like to curate a personal favourites list, please login or sign up.</p> */}
         </div>
         
@@ -163,7 +159,6 @@ function App() {
       <Routes>
         <Route path='/' element={ <SearchPage 
           getQueryParams={getQueryParams} 
-          setLandingPage={setLandingPage} 
           publications={publications} 
           handleLike={handleLike} 
           handleResultPages={handleResultPages} 
@@ -171,7 +166,6 @@ function App() {
           newSearch={newSearch} 
           numResults={numResults} 
           showLoading={showLoading} 
-          landingPage={landingPage}
           apiQuery={apiQuery}/> } />
         <Route path='/favourites' element={ <FavouritePage /> } />
         <Route path='/saved' element={ <SavedPage /> } />

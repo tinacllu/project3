@@ -5,8 +5,8 @@ const ChangePage = ( {handleResultPages, publications, newSearch, numResults} ) 
             {
                 numResults > 1 
                     ?(
-                        <button className="prev" onClick={() => handleResultPages(false)}>
-                            Previous Page
+                        <button className='prev' onClick={() => handleResultPages(false)}>
+                            Prev<span className='long'>ious Page</span>
                         </button>
                     )
                     :null
@@ -16,10 +16,10 @@ const ChangePage = ( {handleResultPages, publications, newSearch, numResults} ) 
                 (publications.length < 10)
                     ? numResults === 1
                         ? null
-                        : <p className="end">End of results</p>
+                        : <p className='end'>End of results</p>
                     : (
-                        <button className="next" onClick={() => handleResultPages(true)}>
-                            Next Page
+                        <button className='next' onClick={() => handleResultPages(true)}>
+                            Next<span className='long'> Page</span>
                         </button>
                     )
             }
