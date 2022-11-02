@@ -88,11 +88,9 @@ function App() {
           s: numResults,
         },
       }).then((res) => {
-          console.log(res);
-          console.log(res.data.records);
           setPublications(res.data.records);
           setShowLoading(false);
-      }).catch((error) => {
+      }).catch(() => {
         alert('Oh no - something went wrong! Please try again later :( ')
       });
     } else {
@@ -110,7 +108,7 @@ function App() {
       const newFavList = [];
       // const newSavedList = [];
       const data = response.val();
-      for (let key in data[demo]) {
+      for (let key in data['demo']) {
         newFavList.push({ key: key, name: data[key]});
       };
 
