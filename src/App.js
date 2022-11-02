@@ -23,7 +23,6 @@ function App() {
   const [ numResults, setNumResults] = useState(1);
   const [ newSearch, setNewSearch ] = useState(false);
   const [ showLoading, setShowLoading ] = useState(false);
-  const [ loginCreds, setLoginCreds ] = useState(['demo', 'demo123']);
   // const [ favList, setFavList ] = useState([]);
   // const [ savedList, setSavedList ] = useState([]);
 
@@ -56,7 +55,7 @@ function App() {
   
   const handleLike = (likeStatus, paperDetails) => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/${[loginCreds[0]]}/favourites`);
+    const databaseRef = ref(database, `/demo/favourites`);
 
     const firebaseObj = push(databaseRef, paperDetails);
     console.log(firebaseObj.key);
@@ -111,7 +110,7 @@ function App() {
       const newFavList = [];
       // const newSavedList = [];
       const data = response.val();
-      for (let key in data[loginCreds[0]]) {
+      for (let key in data[demo]) {
         newFavList.push({ key: key, name: data[key]});
       };
 
@@ -134,7 +133,6 @@ function App() {
         <div className="about">
           <p>Welcome to SciLib - a library to browse and save your favourite scientific literature from Springer Open Access! To get started, simply select a subject of interest from the dropdown menu to see recent papers related to that subject. To find a specific paper, try the Advanced Search option. </p>
           <p>Happy reading!</p>
-          {/* <p>If you would like to curate a personal favourites list, please login or sign up.</p> */}
         </div>
         
       </header>
