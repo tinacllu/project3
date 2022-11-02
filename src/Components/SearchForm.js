@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const SearchForm = ( {getQueryParams, setLandingPage, setNewSearch} ) => {
+const SearchForm = ( {getQueryParams, setNewSearch} ) => {
 
     const [ showForm, setShowForm ] = useState(false);
     const [ userInput, setUserInput ] = useState({subject: '', title: '', year: '', name: '', doi: ''});

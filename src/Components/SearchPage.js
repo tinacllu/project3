@@ -2,119 +2,65 @@ import SearchForm from './SearchForm';
 import Papers from './Papers';
 import ChangePage from './ChangePage';
 
-const SearchPage = ({ getQueryParams, setLandingPage, publications, handleLike, handleResultPages, newSearch, setNewSearch, numResults, showLoading, landingPage, apiQuery}) => {
+const SearchPage = ({ getQueryParams, publications, handleLike, handleResultPages, newSearch, setNewSearch, numResults, showLoading, apiQuery}) => {
+
+    const loading = `<div id="container">
+    <div class="divider" aria-hidden="true"></div>
+    <p class="loading-text" aria-label="Loading">
+      <span class="letter" aria-hidden="true">L</span>
+      <span class="letter" aria-hidden="true">o</span>
+      <span class="letter" aria-hidden="true">a</span>
+      <span class="letter" aria-hidden="true">d</span>
+      <span class="letter" aria-hidden="true">i</span>
+      <span class="letter" aria-hidden="true">n</span>
+      <span class="letter" aria-hidden="true">g</span>
+    </p>
+  </div>`
     return(
         <section className='searchPage wrapper'>
-            <SearchForm getQueryParams={getQueryParams} setLandingPage={setLandingPage} setNewSearch={setNewSearch}/> 
+            <SearchForm getQueryParams={getQueryParams} setNewSearch={setNewSearch}/> 
             
-            {showLoading
-                ? <p className='loading wrapper'>Loading</p>
+            {
+            // once API call is completed, show the results on the page
+            showLoading
+                ? (<div className="loading-icon">
+                        <p>Loading...</p>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                    </div>)
                 : apiQuery
                     ? <Papers publications={publications} handleLike={handleLike}/>
                     : null
             }
             
-            
-            {/* {landingPage 
+            {
+            // when user clicks search, if there are no results from the API call once it has been completed and the search parameters are not empty, then show no results
+            !newSearch
                 ? null
-                : (numResults === 1 && publications.length===0)
-                    ? showLoading
-                        ? null
-                        : <p className='wrapper'>No results. Please adjust your search parameters.</p>
-                    : apiQuery
-                        ? <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
-                        : <p className='wrapper'>Please enter your desired search paramters.</p>      
-                    
-            } */}
-
-
-                {!newSearch
-                    ? null
-                    : (numResults === 1 && publications.length===0 && !showLoading && apiQuery)
-                        ? <p className='wrapper'>No results.</p>
-                        : null}
-
-                {/* // when search button has not been pressed, don't do anything
-                        // if search button is pressed
-                            // and if on first page of results, and there are no results from api call, and it is not loading and apiquery is not an empty string , then show no results */}
+                : (numResults === 1 && publications.length===0 && !showLoading && apiQuery)
+                    ? <p className='wrapper'>No results.</p>
+                    : null
+            }
                         
             {
-
-                // apiQuery && !newSearch
-                //     ? <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
-                //     : <p>Please input your desired search parameters.</p>
-
-                
-                // !newSearch 
-                //     ? apiQuery
-                //         ? <p>new search is false and apiquery is true</p>
-                //         : <p>new search is false and apiquery is false</p>
-                //     : apiQuery
-                //         ? <p>new search is true and apiquery is true</p>
-                //         : <p>new search is true and apiquery is false</p>
-
-                //this one
-                // (!newSearch && !showLoading)
-                //     ? apiQuery
-                //         ? <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
-                //         : null
-                //     : apiQuery 
-                //         ? <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
-                //         : <p>Please input your desired search parameters.</p>
-
-                    
-                // when newSearch is false and apiquery is not empty (true)
-                    // display changepage
-                // when newSearch is true and apiquery is empty (false), display message 
-                // when newSearch is true and apiquery is not empty(true), display changepage
-
-                // (numResults === 1 && publications.length===0 && !showLoading && apiQuery)
-                // if on first page of results, and there are no results from api call, and it is not loading and apiquery is not an empty string 
-
-                // apiQuery 
-                //     ? !newSearch 
-                //         ? <p>apiquery true and new search false</p>
-                //         :<p>apiquery true and new search true</p>
-                //     : !newSearch 
-                //         ? <p>apiquery false and new search false</p>
-                //         : <p>apiquery false and new search true</p>
-
-                // (apiQuery && !showLoading && !newSearch)
-                //     ? !newSearch 
-                //         ? <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
-                //         : <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
-                //     : !newSearch 
-                //         ? null
-                //         : <p>Please input your desired search parameters.</p>
-
-                //when apiquery is true, showloading is false, and newsearch is false 
-
-                // when apiquery is not an empty string(true), and newSearch is false, display buttons
-                // when api query is nto an empty string(false) and new search is true, display buttons
-
-                // when api query is an empty string (false) and new search is false, null
-                // when apiquery is an empty string (false) and new search is true, show message
-
-
-                !showLoading
-                    ? apiQuery
-                        ? <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
-                        : !newSearch
-                            ?null
-                            :<p className='wrapper'>Please input your desired search parameters.</p>
-                    : null
-
-            // !newSearch 
-            //     ? null
-            //     : (numResults === 1 && publications.length===0)
-            //         ? showLoading
-            //             ? null
-            //             : <p className='wrapper'>No results. Please adjust your search parameters.</p>
-            //         : apiQuery
-            //             ? <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
-            //             : <p className='wrapper'>Please enter your desired search paramters.</p>      
-                    
+            // when the API call has been completed, show page change buttons if the user has entered search parameters, otherwise, ask users to input desired search parameters if they are starting a new search
+            !showLoading
+                ? apiQuery
+                    ? <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
+                    : !newSearch
+                        ? null
+                        :<p className='wrapper'>Please enter your search parameters.</p>
+                : null    
             }
+
       </section>
     )
 };

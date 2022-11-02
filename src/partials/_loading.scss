@@ -1,0 +1,49 @@
+@use './variables' as *;
+
+// Loading animation adapted from Dylan Macnab https://codepen.io/DylanMacnab/pen/MeBGWz
+
+.loading-icon {
+    text-align: center;
+    margin: 25px;
+    p {
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin-bottom: 20px;
+    }
+}
+
+.dot {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    background: $darkGray;
+    border-radius: 50%;
+    margin: 10px;
+
+    animation-name: scaleUp;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+// Used a scss for loop to calc and add animation delay to each dot
+// animation duration is length of last animation delay
+@for $i from 1 through 10 {
+    $delay: $i * .1s;
+
+    .dot:nth-of-type(#{$i}n) {
+        animation-delay: $delay;
+    }
+}
+
+@keyframes scaleUp{
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

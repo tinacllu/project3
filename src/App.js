@@ -1,6 +1,6 @@
 // import styling
 import './App.scss';
-import logo from './assets/logoAltEdit.png';
+import logo from './assets/logo.png';
 
 // import Components
 import SearchPage from './Components/SearchPage';
@@ -93,9 +93,7 @@ function App() {
       }).catch(() => {
         alert('Oh no - something went wrong! Please try again later :( ')
       });
-    } else {
-      console.log('apiQuery is empty', apiQuery)
-    }
+    } 
   }, [apiQuery, numResults]);
 // add error handling 
 
