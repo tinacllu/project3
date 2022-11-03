@@ -11,14 +11,14 @@
     }
   }
   
+  @mixin smallTablet {
+    @media (max-width: 620px) {
+      @content;
+    }
+  }
+
   @mixin mobile {
     @media (max-width: 480px) {
         @content;
       }
-  }
-  
-  @mixin smallMobile {
-    @media (max-width: 360px) {
-      @content;
-    }
   }

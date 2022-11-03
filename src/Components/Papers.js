@@ -3,7 +3,8 @@ import Abstract from './Abstract';
 import Authors from './Authors';
 import HeartIcon from './HeartIcon';
 
-const Papers = (props) => {
+const Papers = ( { publications, handleLike, favList } ) => {
+    
     const [ displayAbstract, setDisplayAbstract ] = useState(false);
     const [ buttonId, setbuttonId ] = useState('');
     const handleClick = (e) => {
@@ -18,7 +19,7 @@ const Papers = (props) => {
 
     return(
         <ul className='paperContainer'>
-            {props.publications.map((publication) => {
+            {publications.map((publication) => {
                 return(
                     <li key={publication.doi}>
                         <div className='visibleContainer'>
@@ -37,7 +38,7 @@ const Papers = (props) => {
                                 </button>
                             </div>
                             <div className='icons'>
-                                <HeartIcon handleLike={props.handleLike} publication={publication}/>
+                                <HeartIcon handleLike={handleLike} publication={publication} favList={favList}/>
                                 <button>
                                     <i className='fa-regular fa-bookmark'></i>
                                 </button>

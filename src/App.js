@@ -14,8 +14,9 @@ import firebaseConfig from './Components/Firebase';
 //import npm modules
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getDatabase, ref, onValue, push} from 'firebase/database';
+import { getDatabase, ref, onValue, push, remove} from 'firebase/database';
 import { Link, Routes, Route } from 'react-router-dom';
+// import { Value } from 'sass';
 
 function App() {
   const [ publications, setPublications ] = useState([]);
@@ -23,7 +24,7 @@ function App() {
   const [ numResults, setNumResults] = useState(1);
   const [ newSearch, setNewSearch ] = useState(false);
   const [ showLoading, setShowLoading ] = useState(false);
-  // const [ favList, setFavList ] = useState([]);
+  const [ favList, setFavList ] = useState([]);
   // const [ savedList, setSavedList ] = useState([]);
 
   // save search parameters inputted by user into a stateful variable
@@ -52,27 +53,6 @@ function App() {
     }
     setNewSearch(false);
   }
-  
-  const handleLike = (likeStatus, paperDetails) => {
-    const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/demo/favourites`);
-
-    const firebaseObj = push(databaseRef, paperDetails);
-    console.log(firebaseObj.key);
-    
-    if (likeStatus) {
-      console.log('like status is true');
-    } else {
-      // remove(databaseRef, ({id: paperDetails}) )
-      console.log('likestaus is false')
-    }
-    
-  }
-
-  // const handleUnLike = () => {
-  //   const database = getDatabase(firebaseConfig);
-  //   // const databaseRef = ref(database, `/${bookId}`)
-  // }
 
   // call the API based on user input
   useEffect (() => {
@@ -83,11 +63,18 @@ function App() {
         params: {
           api_key:'d358a2b18c4f7efb5bf611352385eeaf',
           // api_key:'b1d9463d9bc800cb5d5134b95771983c',
-          q: `${apiQuery}`,
+          q: `(${apiQuery} AND language:"en" )`, 
           p: 10,
           s: numResults,
         },
       }).then((res) => {
+        const modifiedApiData = [];
+        res.data.records.forEach((object) => {
+          // console.log(object);
+          console.log(object.doi);
+        })
+
+
         setPublications(res.data.records);
         setShowLoading(false);
       }).catch(() => {
@@ -96,25 +83,75 @@ function App() {
       });
     } 
   }, [apiQuery, numResults]);
-// add error handling 
 
-
+  //********************************
+  // FIREBASE
+  //********************************
   // get data from firebase
-  useEffect (() => {
+  useEffect(() => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database);
+    const databaseRef = ref(database, `/demo/favourites`);
     onValue(databaseRef, (response) => {
-      const newFavList = [];
-      // const newSavedList = [];
+      const newState = [];
       const data = response.val();
-      for (let key in data['demo']) {
-        newFavList.push({ key: key, name: data[key]});
+      for (let key in data) {
+        newState.push({ key: key, name: data[key]});
       };
-
-      // setFavList(newFavList);
-      // setSavedList(newSavedList);
+      setFavList(newState);
+    })
+  }, [])
+  
+  // add/remove items from firebase based on button click
+  const handleLike = (likeStatus, publication) => {
+    const favItemDoi = [];
+    const doiAndKey = {};
+    
+    // loop through each item in firebase and put their doi in favItemDoi, and put their doi and key into the doiAndKey object
+    favList.forEach((favItem) => {
+      favItemDoi.push(favItem.name.doi);
+      doiAndKey[favItem.name.doi] = favItem.key
     });
-  }, []);
+
+    // if the item is already in firebase, remove it
+    if (favItemDoi.includes(publication.doi)) {
+          let removalKey = ''
+          // grab the firebase key from the doiAndKey object and pass it to the remove item function
+          for (let key in doiAndKey) {
+            if (key === publication.doi) {
+              removalKey = doiAndKey[key];
+            }
+          }
+          console.log(removalKey);
+          removeFromFirebase(removalKey);
+
+    // if the item is not already in firebase, add it
+    } else if (!favItemDoi.includes(publication.doi)) {
+          addToFirebase(publication);
+    } else {
+      console.log('send help')
+    }
+  }
+
+  // remove item from firebase
+  const removeFromFirebase = (removalKey) => {
+    const database = getDatabase(firebaseConfig);
+    const databaseRef = ref(database, `/demo/favourites/${removalKey}`);
+    remove(databaseRef);
+    console.log("removed!");
+  }
+
+  // add item to firebase
+  const addToFirebase = (publication) => {
+    console.log("Added!");
+    const database = getDatabase(firebaseConfig);
+    const databaseRef = ref(database, `/demo/favourites`);
+    const firebaseObj = push(databaseRef, publication);
+    console.log(firebaseObj.key);
+  }
+
+  //********************************
+  // FIREBASE
+  //********************************
 
   return (
     <>
@@ -122,7 +159,7 @@ function App() {
       <header className='wrapper'>
         <Link className='h1Container' to='/'>
           <div className='logoContainer'>
-            <img src={logo} alt='line art of atom' />
+            <img src={logo} alt='illustration of three test tubes' />
           </div>
           <h1>SciLib</h1>
         </Link>
@@ -157,17 +194,20 @@ function App() {
           publications={publications} 
           handleLike={handleLike} 
           handleResultPages={handleResultPages} 
+          favList={favList}
           setNewSearch={setNewSearch}
           newSearch={newSearch} 
           numResults={numResults} 
           showLoading={showLoading} 
           apiQuery={apiQuery}/> } />
-        <Route path='/favourites' element={ <FavouritePage /> } />
+        <Route path='/favourites' element={ <FavouritePage 
+          favList={favList}
+          handleLike={handleLike} /> } />
         <Route path='/saved' element={ <SavedPage /> } />
         <Route path='*' element={ <Error404 /> } />
       </Routes>
     </main>
-    <footer>Created by <a href='https://www.tinalu.ca/'>Tina Lu</a> at <a href='https://junocollege.com/'>Juno College</a></footer>
+    <footer>Created by <a href='https://www.tinalu.ca/' target="_blank" rel="noreferrer">Tina Lu</a> at <a href='https://junocollege.com/' target="_blank" rel="noreferrer">Juno College</a></footer>
     </>
   );
 }
