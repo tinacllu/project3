@@ -1,0 +1,89 @@
+@use './variables' as *;
+@use './mixins' as *;
+
+.pageSelection {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    @include tablet {
+        width: 100%;
+    }
+    h3 {
+        padding: 0;
+        font-weight: normal;
+        @include mobile {
+            display: none;
+        }
+    }
+    .page {
+        display: flex;
+        padding: 15px 10px 10px 20px;
+        width: 33.33%;
+        min-width: fit-content;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        color: $darkGray;
+        text-decoration: none;
+        transition: 0.3s;
+        &:hover, &:focus {
+            transform: scaleY(1.1);
+            cursor: pointer;
+        }
+        i {
+            margin-right: 15px;
+            line-height: 25px;
+        }
+    }
+    .search {
+        background-color: $lightBlue;
+    }
+    .favourites {
+        background-color: $pink;
+    }
+    .saved {
+        background-color: $yellow;
+    }
+}
+
+.searchPage, .savedPage, .favouritesPage {
+    display: flex;
+    flex-direction: column;
+    min-height: fit-content;
+    padding: 25px 0;
+    border-radius: 10px;
+    border-top-left-radius: 0;
+    margin-bottom: 55px;
+    min-height: 250px;
+    @include tablet {
+        border-top-right-radius: 0;
+    }
+}
+
+.searchPage {
+    background-color: $lightBlue;
+}
+
+.savedPage {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.savedPage {
+    background-color: $yellow;
+}
+
+.favouritesPage {
+    background-color: $pink;
+    .emptyListMsg {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 0;
+        height: 250px;
+        width: 80%;
+        color: $darkGray;
+    }
+}

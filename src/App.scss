@@ -1,0 +1,14 @@
+@use './partials/setup';
+@use './partials/variables' as *;
+@use './partials/typography'; 
+@use './partials/baseStyles';
+
+@use './partials/header';
+@use './partials/navigation';
+@use './partials/searchForm';
+@use './partials/papers';
+@use './partials/footer';
+@use './partials/error';
+@use './partials/loading';
+
+
