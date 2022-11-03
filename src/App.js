@@ -181,7 +181,14 @@ function App() {
           </Link> 
           <Link className="page favourites" to='/favourites'>
             <i className="fa-solid fa-heart"></i>
-            <h3>Favourites ({favList.length - 1})</h3>
+            <h3>Favourites (
+                {
+                  favList.length - 1>= 0
+                    ? (favList.length - 1)
+                    : null
+                }
+              
+              )</h3>
           </Link>
           <Link className="page saved" to='/saved'>
             <i className='fa-solid fa-bookmark'></i>
