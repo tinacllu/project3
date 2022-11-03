@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Abstract from './Abstract';
 import Authors from './Authors';
 import HeartIcon from './HeartIcon';
+import SavedIcon from './SavedIcon';
 
 const Papers = ( { publications, handleLike, favList } ) => {
     
@@ -39,9 +40,7 @@ const Papers = ( { publications, handleLike, favList } ) => {
                             </div>
                             <div className='icons'>
                                 <HeartIcon handleLike={handleLike} publication={publication} favList={favList}/>
-                                <button>
-                                    <i className='fa-regular fa-bookmark'></i>
-                                </button>
+                                <SavedIcon />
                             </div>
                         </div>
                         {
