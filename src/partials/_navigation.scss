@@ -63,12 +63,11 @@
     background-color: $lightBlue;
 }
 
-.savedPage, .favouritesPage {
+.savedPage {
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-
 }
 
 .savedPage {
@@ -77,4 +76,14 @@
 
 .favouritesPage {
     background-color: $pink;
+    .emptyListMsg {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 0;
+        height: 250px;
+        width: 80%;
+        color: $darkGray;
+    }
 }

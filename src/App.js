@@ -69,13 +69,23 @@ function App() {
         },
       }).then((res) => {
         const modifiedApiData = [];
+        
+        const favListDoiArray = [];
+        favList.forEach((favItem) => {
+          favListDoiArray.push(favItem['name']['doi'])
+        });
+
         res.data.records.forEach((object) => {
-          // console.log(object);
-          console.log(object.doi);
+          if (favListDoiArray.includes(object.doi)) {
+            console.log('already in list!')
+            modifiedApiData.push({...object, favStatus: true});
+          } else {
+            console.log('time to cry')
+            modifiedApiData.push({...object, favStatus: false});
+          }
         })
-
-
-        setPublications(res.data.records);
+        // setPublications(res.data.records);
+        setPublications(modifiedApiData);
         setShowLoading(false);
       }).catch(() => {
         alert('Oh no - something went wrong! Please try again later :( ');
@@ -102,7 +112,7 @@ function App() {
   }, [])
   
   // add/remove items from firebase based on button click
-  const handleLike = (likeStatus, publication) => {
+  const handleLike = (publication) => {
     const favItemDoi = [];
     const doiAndKey = {};
     
@@ -112,6 +122,7 @@ function App() {
       doiAndKey[favItem.name.doi] = favItem.key
     });
 
+    
     // if the item is already in firebase, remove it
     if (favItemDoi.includes(publication.doi)) {
           let removalKey = ''
@@ -127,13 +138,12 @@ function App() {
     // if the item is not already in firebase, add it
     } else if (!favItemDoi.includes(publication.doi)) {
           addToFirebase(publication);
-    } else {
-      console.log('send help')
     }
-  }
+  };
 
   // remove item from firebase
   const removeFromFirebase = (removalKey) => {
+    console.log(removalKey);
     const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/demo/favourites/${removalKey}`);
     remove(databaseRef);
@@ -179,7 +189,7 @@ function App() {
           </Link> 
           <Link className="page favourites" to='/favourites'>
             <i className="fa-solid fa-heart"></i>
-            <h3>Favourites</h3>
+            <h3>Favourites ({favList.length - 1})</h3>
           </Link>
           <Link className="page saved" to='/saved'>
             <i className='fa-solid fa-bookmark'></i>
