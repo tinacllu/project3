@@ -11,10 +11,8 @@ const HeartIcon = ( {handleLike, publication, favList} ) => {
         });
 
         if (favListDoiArray.includes(publication.doi)) {
-            console.log('in fav');
             setLiked(true);
         } else {
-            console.log('no one likes you');
             setLiked(false);
         }
     }, [])

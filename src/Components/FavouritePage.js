@@ -9,7 +9,6 @@ const FavouritePage = ( { handleLike, favList }) => {
         pubArray.push({...favItem.name, favStatus: true}); 
        }
     });
-    console.log(pubArray);
 
     return(
         <section className="favouritesPage wrapper">

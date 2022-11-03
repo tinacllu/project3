@@ -40,7 +40,6 @@ function App() {
     };
     const newQueryString = newQueryArray.join(' AND ');
     setApiQuery(newQueryString);
-    // console.log(newQueryString, 'newquerystring')
   }
 
   // save number of results in a stateful variable to be used in API call when user clicks next/previous page
@@ -77,10 +76,8 @@ function App() {
 
         res.data.records.forEach((object) => {
           if (favListDoiArray.includes(object.doi)) {
-            console.log('already in list!')
             modifiedApiData.push({...object, favStatus: true});
           } else {
-            console.log('time to cry')
             modifiedApiData.push({...object, favStatus: false});
           }
         })
@@ -132,7 +129,6 @@ function App() {
               removalKey = doiAndKey[key];
             }
           }
-          console.log(removalKey);
           removeFromFirebase(removalKey);
 
     // if the item is not already in firebase, add it
@@ -143,20 +139,16 @@ function App() {
 
   // remove item from firebase
   const removeFromFirebase = (removalKey) => {
-    console.log(removalKey);
     const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/demo/favourites/${removalKey}`);
     remove(databaseRef);
-    console.log("removed!");
   }
 
   // add item to firebase
   const addToFirebase = (publication) => {
-    console.log("Added!");
     const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/demo/favourites`);
-    const firebaseObj = push(databaseRef, publication);
-    console.log(firebaseObj.key);
+    push(databaseRef, publication);
   }
 
   //********************************
