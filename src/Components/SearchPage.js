@@ -2,7 +2,7 @@ import SearchForm from './SearchForm';
 import Papers from './Papers';
 import ChangePage from './ChangePage';
 
-const SearchPage = ({ getQueryParams, publications, handleLike, handleResultPages, favList, newSearch, setNewSearch, numResults, showLoading, apiQuery}) => {
+const SearchPage = ({ getQueryParams, publications, handleLikeOrSave, handleResultPages, favList, savedList, newSearch, setNewSearch, numResults, showLoading, apiQuery}) => {
 
     return(
         <section className='searchPage wrapper'>
@@ -25,7 +25,7 @@ const SearchPage = ({ getQueryParams, publications, handleLike, handleResultPage
                         <div className="dot"></div>
                     </div>)
                 : apiQuery
-                    ? <Papers publications={publications} handleLike={handleLike} favList={favList}/>
+                    ? <Papers publications={publications} handleLikeOrSave={handleLikeOrSave} favList={favList} savedList={savedList} />
                     : null
             }
             

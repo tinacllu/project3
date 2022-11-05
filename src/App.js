@@ -25,7 +25,7 @@ function App() {
   const [ newSearch, setNewSearch ] = useState(false);
   const [ showLoading, setShowLoading ] = useState(false);
   const [ favList, setFavList ] = useState([]);
-  // const [ savedList, setSavedList ] = useState([]);
+  const [ savedList, setSavedList ] = useState([]);
 
   // save search parameters inputted by user into a stateful variable
   const getQueryParams = (event, userInput) => {
@@ -74,16 +74,27 @@ function App() {
           favListDoiArray.push(favItem['name']['doi'])
         });
 
+        const savedListDoiArray = [];
+        savedList.forEach((savedItem) => {
+          savedListDoiArray.push(savedItem['name']['doi'])
+        });
+
         res.data.records.forEach((object) => {
-          if (favListDoiArray.includes(object.doi)) {
-            modifiedApiData.push({...object, favStatus: true});
+          if (favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)) {
+            modifiedApiData.push({...object, favStatus: true, savedStatus: true});
+          } else if (!favListDoiArray.includes(object.doi) && !savedListDoiArray.includes(object.doi)) {
+            modifiedApiData.push({...object, favStatus: false, savedStatus: false});
+          } else if (favListDoiArray.includes(object.doi) && !savedListDoiArray.includes(object.doi)) {
+            modifiedApiData.push({...object, favStatus: true, savedStatus: false});
+          } else if (!favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)) {
+            modifiedApiData.push({...object, favStatus: false, savedStatus: true});
           } else {
-            modifiedApiData.push({...object, favStatus: false});
+            console.log("there's another condition!")
           }
         })
-        // setPublications(res.data.records);
         setPublications(modifiedApiData);
         setShowLoading(false);
+        console.log(publications);
       }).catch(() => {
         alert('Oh no - something went wrong! Please try again later :( ');
         setShowLoading(true);
@@ -94,60 +105,76 @@ function App() {
   //********************************
   // FIREBASE
   //********************************
-  // get data from firebase
+
+  // get data from firebase for favourites and saved lists
   useEffect(() => {
+    getFirebaseData('favourites');
+    getFirebaseData('saved');
+  }, []);
+
+  const getFirebaseData = (location) => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/demo/favourites`);
+    const databaseRef = ref(database, `/demo/${location}`);
     onValue(databaseRef, (response) => {
       const newState = [];
       const data = response.val();
       for (let key in data) {
         newState.push({ key: key, name: data[key]});
       };
-      setFavList(newState);
-    })
-  }, [])
+      if (location === 'favourites') {
+        setFavList(newState);
+      } else if (location === 'saved') {
+        setSavedList(newState);
+      }
+    });
+  }
   
   // add/remove items from firebase based on button click
-  const handleLike = (publication) => {
-    const favItemDoi = [];
+  const handleLikeOrSave = (location, publication) => {
+    const firebaseDoiArray = [];
     const doiAndKey = {};
-    
-    // loop through each item in firebase and put their doi in favItemDoi, and put their doi and key into the doiAndKey object
-    favList.forEach((favItem) => {
-      favItemDoi.push(favItem.name.doi);
-      doiAndKey[favItem.name.doi] = favItem.key
-    });
 
-    
-    // if the item is already in firebase, remove it
-    if (favItemDoi.includes(publication.doi)) {
-          let removalKey = ''
-          // grab the firebase key from the doiAndKey object and pass it to the remove item function
-          for (let key in doiAndKey) {
-            if (key === publication.doi) {
-              removalKey = doiAndKey[key];
-            }
-          }
-          removeFromFirebase(removalKey);
-
-    // if the item is not already in firebase, add it
-    } else if (!favItemDoi.includes(publication.doi)) {
-          addToFirebase(publication);
+    if (location === 'favourites') {
+      // loop through each item in firebase and put their doi in favItemDoi, and put their doi and key into the doiAndKey object
+      favList.forEach((favItem) => {
+        firebaseDoiArray.push(favItem.name.doi);
+        doiAndKey[favItem.name.doi] = favItem.key
+      });
+    } else if (location === 'saved') {
+      savedList.forEach((savedItem) => {
+        firebaseDoiArray.push(savedItem.name.doi);
+        doiAndKey[savedItem.name.doi] = savedItem.key
+      });
     }
+      // if the item is already in firebase, remove it
+      if (firebaseDoiArray.includes(publication.doi)) {
+            let removalKey = ''
+            // grab the firebase key from the doiAndKey object and pass it to the remove item function
+            for (let key in doiAndKey) {
+              if (key === publication.doi) {
+                removalKey = doiAndKey[key];
+              }
+            }
+            removeFromFirebase(location, removalKey);
+
+      // if the item is not already in firebase, add it
+      } else if (!firebaseDoiArray.includes(publication.doi)) {
+            addToFirebase(location, publication);
+      }
+
   };
 
   // remove item from firebase
-  const removeFromFirebase = (removalKey) => {
+  const removeFromFirebase = (location, removalKey) => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/demo/favourites/${removalKey}`);
+    const databaseRef = ref(database, `/demo/${location}/${removalKey}`);
     remove(databaseRef);
   }
 
   // add item to firebase
-  const addToFirebase = (publication) => {
+  const addToFirebase = (location, publication) => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/demo/favourites`);
+    const databaseRef = ref(database, `/demo/${location}`);
     push(databaseRef, publication);
   }
 
@@ -187,12 +214,17 @@ function App() {
                     ? (favList.length - 1)
                     : null
                 }
-              
               )</h3>
           </Link>
           <Link className="page saved" to='/saved'>
             <i className='fa-solid fa-bookmark'></i>
-            <h3>Saved</h3>
+            <h3>Saved (
+              {
+                  savedList.length - 1>= 0
+                    ? (savedList.length - 1)
+                    : null
+                }
+              )</h3>
           </Link>
         </div>
       </section>
@@ -201,9 +233,10 @@ function App() {
         <Route path='/' element={ <SearchPage 
           getQueryParams={getQueryParams} 
           publications={publications} 
-          handleLike={handleLike} 
+          handleLikeOrSave={handleLikeOrSave} 
           handleResultPages={handleResultPages} 
           favList={favList}
+          savedList={savedList}
           setNewSearch={setNewSearch}
           newSearch={newSearch} 
           numResults={numResults} 
@@ -211,8 +244,12 @@ function App() {
           apiQuery={apiQuery}/> } />
         <Route path='/favourites' element={ <FavouritePage 
           favList={favList}
-          handleLike={handleLike} /> } />
-        <Route path='/saved' element={ <SavedPage /> } />
+          handleLikeOrSave={handleLikeOrSave}
+          savedList={savedList} /> } />
+        <Route path='/saved' element={ <SavedPage 
+          favList={favList}
+          handleLikeOrSave={handleLikeOrSave}
+          savedList={savedList}/> } />
         <Route path='*' element={ <Error404 /> } />
       </Routes>
     </main>

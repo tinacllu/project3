@@ -4,8 +4,7 @@ import Authors from './Authors';
 import HeartIcon from './HeartIcon';
 import SavedIcon from './SavedIcon';
 
-const Papers = ( { publications, handleLike, favList } ) => {
-    
+const Papers = ( { publications, handleLikeOrSave, favList, savedList } ) => {
     const [ displayAbstract, setDisplayAbstract ] = useState(false);
     const [ buttonId, setbuttonId ] = useState('');
     const handleClick = (e) => {
@@ -39,8 +38,8 @@ const Papers = ( { publications, handleLike, favList } ) => {
                                 </button>
                             </div>
                             <div className='icons'>
-                                <HeartIcon handleLike={handleLike} publication={publication} favList={favList}/>
-                                <SavedIcon />
+                                <HeartIcon handleLikeOrSave={handleLikeOrSave} publication={publication} favList={favList}/>
+                                <SavedIcon handleLikeOrSave={handleLikeOrSave} publication={publication} savedList={savedList}/>
                             </div>
                         </div>
                         {
