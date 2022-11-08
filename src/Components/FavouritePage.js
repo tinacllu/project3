@@ -1,7 +1,7 @@
 import Papers from "./Papers";
 
-const FavouritePage = ( { handleLike, favList }) => {
-    const pubArray = []
+const FavouritePage = ( { handleLikeOrSave, favList, savedList }) => {
+    const pubArray = [];
 
     // loop through each item that has been saved as favourite in firebase, and if its not the placeholder, then add it to pubArray and display to the page
     favList.forEach((favItem)=> {
@@ -18,7 +18,7 @@ const FavouritePage = ( { handleLike, favList }) => {
                         <p>No favourites yet!</p> 
                         <p>Browse some papers and use the heart icon to add them to your favourites list ❤</p>
                         </div>)
-                    :<Papers publications={pubArray} handleLike={handleLike} favList={favList} />
+                    :<Papers publications={pubArray} handleLikeOrSave={handleLikeOrSave} favList={favList} savedList={savedList}/>
             }
         </section>
     )

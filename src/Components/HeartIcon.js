@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 
-const HeartIcon = ( {handleLike, publication, favList} ) => {
+const HeartIcon = ( {handleLikeOrSave, publication, favList} ) => {
     const [ liked, setLiked ] = useState(false);
 
-    // if the publication is in fav list, then set liked to true, else set liked to true
+    // if the publication is in fav list, then set liked to true, else set liked to false
     useEffect(() => {
         const favListDoiArray = [];
         favList.forEach((favItem) => {
@@ -19,7 +19,7 @@ const HeartIcon = ( {handleLike, publication, favList} ) => {
 
     return(
         // create a ternary for setLiked (use ternary and specifically say true or false instead)
-        <button onClick={() => {handleLike(publication); setLiked(!liked)}}>
+        <button onClick={() => {handleLikeOrSave('favourites', publication); setLiked(!liked)}}>
             {
                 liked
                     ? <i className="fa-solid fa-heart"></i>
