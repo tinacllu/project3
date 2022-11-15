@@ -17,7 +17,6 @@ const SavedIcon = ({handleLikeOrSave, publication, savedList}) => {
         }
     }, []);
 
-    console.log(publication);
     return(
         <button onClick={() => {handleLikeOrSave('saved', publication); setSaved(!saved)}}>
             {

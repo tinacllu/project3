@@ -57,25 +57,6 @@
     @include tablet {
         border-top-right-radius: 0;
     }
-}
-
-.searchPage {
-    background-color: $lightBlue;
-}
-
-.savedPage {
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.savedPage {
-    background-color: $yellow;
-}
-
-.favouritesPage {
-    background-color: $pink;
     .emptyListMsg {
         display: flex;
         flex-direction: column;
@@ -86,4 +67,16 @@
         width: 80%;
         color: $darkGray;
     }
+}
+
+.searchPage {
+    background-color: $lightBlue;
+}
+
+.savedPage {
+    background-color: $yellow;
+}
+
+.favouritesPage {
+    background-color: $pink;
 }
