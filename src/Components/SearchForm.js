@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { MainContext } from './Main';
 
-const SearchForm = ( {getQueryParams, setNewSearch} ) => {
+const SearchForm = () => {
+    const { getQueryParams, setNewSearch } = useContext(MainContext);
 
     const [ showForm, setShowForm ] = useState(false);
     const [ userInput, setUserInput ] = useState({subject: '', title: '', year: '', name: '', doi: ''});
