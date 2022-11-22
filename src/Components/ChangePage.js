@@ -1,4 +1,9 @@
-const ChangePage = ( {handleResultPages, publications, newSearch, numResults} ) => {
+import { useContext } from "react";
+import { MainContext } from "./Main";
+
+const ChangePage = () => {
+
+    const { handleResultPages, publications, numResults } = useContext(MainContext)
 
     return(
         <div className='pageButtons'>
