@@ -1,11 +1,7 @@
 import Papers from "./Papers";
 
-import { useContext } from "react";
-import { MainContext } from "./Main";
-
-const SavedPage = () => {
+const SavedPage = ({ handleLikeOrSave, favList, savedList }) => {
     const pubArray = [];
-    const { favList, handleLikeOrSave, savedList }= useContext(MainContext);
 
     savedList.forEach((savedItem)=> {
         if (savedItem.key !== 'placeholder') {
