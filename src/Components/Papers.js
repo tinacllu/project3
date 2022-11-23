@@ -1,15 +1,12 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import Abstract from './Abstract';
 import Authors from './Authors';
 import HeartIcon from './HeartIcon';
 import SavedIcon from './SavedIcon';
-import { MainContext } from './Main';
 
-const Papers = () => {
+const Papers = ( { publications, handleLikeOrSave, favList, savedList } ) => {
     const [ displayAbstract, setDisplayAbstract ] = useState(false);
     const [ buttonId, setbuttonId ] = useState('');
-    const { publications } = useContext(MainContext);
-
     const handleClick = (e) => {
         if (buttonId === '' || buttonId !== e.target.parentElement.id) {
             setbuttonId(e.target.parentElement.id);
@@ -41,8 +38,8 @@ const Papers = () => {
                                 </button>
                             </div>
                             <div className='icons'>
-                                <HeartIcon publication={publication} />
-                                <SavedIcon publication={publication} />
+                                <HeartIcon handleLikeOrSave={handleLikeOrSave} publication={publication} favList={favList}/>
+                                <SavedIcon handleLikeOrSave={handleLikeOrSave} publication={publication} savedList={savedList}/>
                             </div>
                         </div>
                         {

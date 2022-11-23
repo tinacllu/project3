@@ -2,11 +2,11 @@ import SearchForm from './SearchForm';
 import Papers from './Papers';
 import ChangePage from './ChangePage';
 
-const SearchPage = ({ publications, newSearch, numResults, showLoading, apiQuery}) => {
+const SearchPage = ({ getQueryParams, publications, handleLikeOrSave, handleResultPages, favList, savedList, newSearch, setNewSearch, numResults, showLoading, apiQuery}) => {
 
     return(
         <section className='searchPage wrapper'>
-            <SearchForm /> 
+            <SearchForm getQueryParams={getQueryParams} setNewSearch={setNewSearch}/> 
             
             {
             // once API call is completed, show the results on the page
@@ -25,7 +25,7 @@ const SearchPage = ({ publications, newSearch, numResults, showLoading, apiQuery
                         <div className="dot"></div>
                     </div>)
                 : apiQuery
-                    ? <Papers />
+                    ? <Papers publications={publications} handleLikeOrSave={handleLikeOrSave} favList={favList} savedList={savedList} />
                     : null
             }
             
@@ -42,7 +42,7 @@ const SearchPage = ({ publications, newSearch, numResults, showLoading, apiQuery
             // when the API call has been completed, show page change buttons if the user has entered search parameters, otherwise, ask users to input desired search parameters if they are starting a new search
             !showLoading
                 ? apiQuery
-                    ? <ChangePage />
+                    ? <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
                     : !newSearch
                         ? null
                         :<p className='wrapper'>Please enter your search parameters.</p>
