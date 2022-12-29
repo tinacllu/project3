@@ -3,6 +3,7 @@ import SearchPage from './SearchPage';
 import FavouritePage from './FavouritePage';
 import SavedPage from './SavedPage'
 import Error404 from './Error404';
+import Login from './Login';
 
 // config
 import firebaseConfig from './Firebase';
@@ -24,6 +25,13 @@ const Main = () => {
   const [ showLoading, setShowLoading ] = useState(false);
   const [ favList, setFavList ] = useState([]);
   const [ savedList, setSavedList ] = useState([]);
+  const [ loggedIn, setLoggedIn ] = useState(false);
+
+
+  const handleLogIn = (event, username, password ) => {
+    event.preventDefault();
+    console.log(username, password);
+  }
 
   // save search parameters inputted by user into a stateful variable
   const getQueryParams = (event, userInput) => {
@@ -225,6 +233,7 @@ const Main = () => {
     
     <MainContext.Provider value={context} >
       <Routes>
+        <Route path='/login' element={ <Login handleLogIn={handleLogIn}/> }></Route>
         <Route path='/' element={ <SearchPage 
           publications={publications} 
           newSearch={newSearch} 

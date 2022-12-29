@@ -1,0 +1,83 @@
+@use './variables' as *;
+@use './mixins' as *;
+
+
+.account {
+ background-color: $yellow;
+ color: $darkGray;
+ padding: 5px 10px;
+ border-radius: 10px;
+}
+
+.guest {
+    background-color: $pink;
+}
+
+.loginPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: $darkBlue;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    .contentContainer {
+        background-color: $lightBlue;
+        border-radius: 10px;
+        width: 50vw;
+    }
+    .exit {
+        display: flex;
+        justify-content: flex-end;
+        background-color: transparent;
+        i {
+            color: $darkGray;
+            transition: 0.3s;
+            padding: 15px;
+            &:hover, &:focus {
+                transform: scale(1.2);
+            }
+        }
+    }
+    form, .switch {
+        display: flex;
+        flex-direction: column;
+        padding: 15px 50px;
+        width: 100%;
+        fieldset {
+            all: unset;
+            display: flex;
+            flex-direction: column;
+        }
+    }
+    form {
+        label {
+            margin-bottom: 5px;
+            margin-left: 5px;
+        }
+        input {
+            margin-bottom: 10px;;
+        }
+        .submitLogin {
+            margin: 5px;
+            padding: 10px;
+            width: 50%;
+            min-width: fit-content;
+            align-self: center;
+        }
+    }
+
+    .switch {
+        padding-bottom: 50px;
+        button {
+            background-color: transparent;
+            text-decoration: underline;
+            color: $darkGray;
+            width: fit-content;
+            padding: 0;
+        }
+    }
+
+}
