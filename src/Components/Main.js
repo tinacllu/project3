@@ -4,6 +4,7 @@ import FavouritePage from './FavouritePage';
 import SavedPage from './SavedPage'
 import Error404 from './Error404';
 import Login from './Login';
+import LandingPage from './LandingPage';
 
 // config
 import firebaseConfig from './Firebase';
@@ -26,12 +27,25 @@ const Main = () => {
   const [ favList, setFavList ] = useState([]);
   const [ savedList, setSavedList ] = useState([]);
   const [ loggedIn, setLoggedIn ] = useState(false);
+  const [ accountDetails, setAccountDetails ] = useState({username: 'guest', password: 'guest123'});
 
 
-  const handleLogIn = (event, username, password ) => {
-    event.preventDefault();
+  // on user login/created an account, save their usernames within firebase
+  const handleLogIn = (username, password ) => {
     console.log(username, password);
+
   }
+
+  useEffect(() => {
+    const database = getDatabase(firebaseConfig);
+    const databaseRef = ref(database, `/${accountDetails.username}/account`);
+    // only add account details if it doesn't already exist 
+    onValue(databaseRef, (response) => {
+      if (!response.val()) {
+        push(databaseRef, accountDetails);
+      }
+    });
+  }, [accountDetails])
 
   // save search parameters inputted by user into a stateful variable
   const getQueryParams = (event, userInput) => {
@@ -117,7 +131,7 @@ const Main = () => {
 
   const getFirebaseData = (location) => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/demo/${location}`);
+    const databaseRef = ref(database, `/${accountDetails.username}/${location}`);
     onValue(databaseRef, (response) => {
       const newState = [];
       const data = response.val();
@@ -170,14 +184,14 @@ const Main = () => {
   // remove item from firebase
   const removeFromFirebase = (location, removalKey) => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/demo/${location}/${removalKey}`);
+    const databaseRef = ref(database, `/${accountDetails.username}/${location}/${removalKey}`);
     remove(databaseRef);
   }
 
   // add item to firebase
   const addToFirebase = (location, publication) => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/demo/${location}`);
+    const databaseRef = ref(database, `/${accountDetails.username}/${location}`);
     push(databaseRef, publication);
   }
 
@@ -204,11 +218,11 @@ const Main = () => {
     <main>
       <section className='wrapper'>
         <div className='pageSelection'>
-          <Link className="page search" to="/">
+          <Link className="page search" to={`/${accountDetails.username}`}>
             <i className="fa-solid fa-magnifying-glass"></i>
             <h3>Search</h3>
           </Link> 
-          <Link className="page favourites" to='/favourites'>
+          <Link className="page favourites" to={`/${accountDetails.username}/favourites`}>
             <i className="fa-solid fa-heart"></i>
             <h3>Favourites (
                 {
@@ -218,7 +232,7 @@ const Main = () => {
                 }
               )</h3>
           </Link>
-          <Link className="page saved" to='/saved'>
+          <Link className="page saved" to={`/${accountDetails.username}/saved`}>
             <i className='fa-solid fa-bookmark'></i>
             <h3>Saved (
               {
@@ -233,15 +247,16 @@ const Main = () => {
     
     <MainContext.Provider value={context} >
       <Routes>
-        <Route path='/login' element={ <Login handleLogIn={handleLogIn}/> }></Route>
-        <Route path='/' element={ <SearchPage 
+        <Route path='/' element={ <LandingPage /> }></Route>
+        <Route path='/login' element={ <Login handleLogIn={handleLogIn} setAccountDetails={setAccountDetails} accountDetails={accountDetails}/> }></Route>
+        <Route path={`/${accountDetails.username}`} element={ <SearchPage 
           publications={publications} 
           newSearch={newSearch} 
           numResults={numResults} 
           showLoading={showLoading} 
           apiQuery={apiQuery}/> } />
-        <Route path='/favourites' element={ <FavouritePage /> } />
-        <Route path='/saved' element={ <SavedPage /> } />
+        <Route path={`/${accountDetails.username}/favourites`} element={ <FavouritePage /> } />
+        <Route path={`/${accountDetails.username}/saved`} element={ <SavedPage /> } />
         <Route path='*' element={ <Error404 /> } />
       </Routes>
       </MainContext.Provider>

@@ -11,6 +11,7 @@ const FavouritePage = () => {
        if (favItem.key !== 'placeholder') {
         pubArray.push({...favItem.name, favStatus: true}); 
        }
+       console.log(pubArray);
     });
 
     return(
