@@ -13,7 +13,7 @@ import firebaseConfig from './Firebase';
 import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
 import { getDatabase, ref, onValue, push, remove} from 'firebase/database';
-import { Link, Routes, Route } from 'react-router-dom';
+import { Link, Routes, Route, useNavigate } from 'react-router-dom';
 
 export const MainContext = createContext();
 
@@ -29,6 +29,8 @@ const Main = () => {
   const [ loggedIn, setLoggedIn ] = useState(false);
   const [ accountDetails, setAccountDetails ] = useState({username: '', password: ''});
 
+
+  const navigate = useNavigate();
 
   // on user login/created an account, save their usernames within firebase
   const handleLogIn = (username, password ) => {
@@ -218,6 +220,14 @@ const Main = () => {
     <>
     <main>
       <section className='wrapper'>
+        {loggedIn
+          ?<button onClick={() => {setLoggedIn(false); setAccountDetails({username:'', password:''}); navigate('/');}}>Log Out</button>
+          :<button onClick={() => {navigate('/login')}} >Log In</button>}
+        {
+          accountDetails.username
+            ?<p>Welcome {accountDetails.username}</p>
+            :null
+        }
         <div className='pageSelection'>
           <Link className="page search" to={`/${accountDetails.username}`}>
             <i className="fa-solid fa-magnifying-glass"></i>
@@ -249,7 +259,7 @@ const Main = () => {
     <MainContext.Provider value={context} >
       <Routes>
         <Route path='/' element={ <LandingPage setAccountDetails={setAccountDetails} /> }></Route>
-        <Route path='/login' element={ <Login handleLogIn={handleLogIn} setAccountDetails={setAccountDetails} accountDetails={accountDetails}/> }></Route>
+        <Route path='/login' element={ <Login handleLogIn={handleLogIn} setAccountDetails={setAccountDetails} accountDetails={accountDetails} setLoggedIn={setLoggedIn}/> }></Route>
         <Route path={`/${accountDetails.username}`} element={ <SearchPage 
           publications={publications} 
           newSearch={newSearch} 

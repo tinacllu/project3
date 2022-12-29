@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import firebaseConfig from './Firebase';
-import { getDatabase, ref, onValue, push, remove} from 'firebase/database';
+import { getDatabase, ref, onValue } from 'firebase/database';
 
-const Login = ( { handleLogIn, setAccountDetails, accountDetails } ) => {
+const Login = ( { handleLogIn, setAccountDetails, accountDetails, setLoggedIn } ) => {
     const [ login, setLogin ] = useState(true);
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
@@ -20,68 +20,53 @@ const Login = ( { handleLogIn, setAccountDetails, accountDetails } ) => {
             for (let key in response.val()) {
                 if (key === username && Object.values(response.val()[key]['account'])[0].password === password) {
                     console.log('log in successful');
-                    // setAccountDetails({username: username, password: password});
-                    // handleLogIn(username, password)
-                    // navigate(`/${username}`);
+                    setAccountDetails({username: username, password: password});
+                    handleLogIn(username, password);
+                    navigate(`/${username}`);
+                    setValidAccount(true);
+                    setLoggedIn(true);
+                    break;
                 } else {
                     console.log('username or password is wrong')
+                    setValidAccount(false);
                 }
             }
         })
     }
 
     const matchAccount = () => {
+        let match = false;
         const database = getDatabase(firebaseConfig);
         const databaseRef = ref(database);
         onValue(databaseRef, (response) => {
-            for (let key in response.val()) {}
+            for (let key in response.val()) {
+                if (key === username) {
+                    console.log('please pick another username');
+                    match = true;
+                    setValidAccount(false);
+                    break;
+                }
+            }
+            if (!match) {
+                console.log('account successfully created')
+                setAccountDetails({username: username, password: password});
+                handleLogIn(username, password)
+                navigate(`/${username}`);
+                setValidAccount(true);
+                setLoggedIn(true);
+            }
         })
     }
 
-    const checkCredentials = (e, username, password) => {
+    const checkCredentials = (e) => {
         e.preventDefault();
         
-        // const database = getDatabase(firebaseConfig);
-        // const databaseRef = ref(database);
-        // onValue(databaseRef, (response) => {
-        //     for (let key in response.val()) {
-                
-        //         if (login) {
-        //             if (key === username && Object.values(response.val()[key]['account'])[0].password === password) {
-        //                 console.log('log in successful');
-        //                 setAccountDetails({username: username, password: password});
-        //                 handleLogIn(username, password)
-        //                 navigate(`/${username}`);
-        //             } else {
-        //                 console.log('username or password is wrong')
-        //             }
-        //         } else {
-        //             if (key === username) {
-        //                 console.log('please pick another username')
-        //             } else {
-        //                 console.log('account successfully created')
-        //                 // setAccountDetails({username: username, password: password});
-        //                 // handleLogIn(username, password)
-        //                 // navigate(`/${username}`);
-        //             }
-        //         }
-        //         // login = true
-        //             // if username & password matches, return true
-        //             // if no match, then tell user to check email/pass combo
-        //         // login = false (create account)
-        //             // if username matches, tell user to pick another one
-        //             // else let them creat ethe account 
-        //         // if (key === username ) {
-        //         //     console.log('it matches')
-        //         //     console.log(Object.values(response.val()[key]['account'])[0].password)
-        //         // }
-        //     }
-        // });
+        if (login) {
+            matchLogin();
+        } else {
+            matchAccount();
+        }
 
-        //if credentials good, then call the function
-        setAccountDetails({username: username, password: password});
-        handleLogIn(username, password)
-        navigate(`/${username}`);
         setUsername('');
         setPassword('');
     }
@@ -92,7 +77,7 @@ const Login = ( { handleLogIn, setAccountDetails, accountDetails } ) => {
                 <Link className='exit' to='/'>
                     <i className="fa-solid fa-x"></i>
                 </Link>
-                <form onSubmit={(e) => {checkCredentials(e, username, password)}}>
+                <form onSubmit={(e) => {checkCredentials(e)}}>
                     <fieldset className='inputs'>
                         <label htmlFor='username'>Username:</label>
                         <input type='text' id='username' required value={username} onChange={(e) => {setUsername(e.target.value)}}></input>
@@ -104,7 +89,11 @@ const Login = ( { handleLogIn, setAccountDetails, accountDetails } ) => {
                             : <button type='submit' className='submitLogin'>Create Account</button>}
                 </form>
                 
-
+                {validAccount
+                    ?null
+                    :login
+                        ?<p>username or password is wrong. Please try again.</p>
+                        :<p>username already exists. Please choose another username.</p>}
 
                 {login
                     ?<div className='switch'>
@@ -113,7 +102,7 @@ const Login = ( { handleLogIn, setAccountDetails, accountDetails } ) => {
                     </div>
                     :<div className='switch'>
                         <p>Already have an account?</p>
-                        <button onClick={() => setLogin(!login)}>Log In</button>
+                        <button onClick={() => {setLogin(!login); setValidAccount(true)}}>Log In</button>
                     </div>}
             </div>
         </section>
