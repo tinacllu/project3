@@ -25,7 +25,7 @@ const SearchPage = ({ publications, newSearch, numResults, showLoading, apiQuery
                         <div className="dot"></div>
                     </div>)
                 : apiQuery
-                    ? <Papers />
+                    ? <Papers publications={publications}/>
                     : null
             }
             

@@ -1,14 +1,12 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import Abstract from './Abstract';
 import Authors from './Authors';
 import HeartIcon from './HeartIcon';
 import SavedIcon from './SavedIcon';
-import { MainContext } from './Main';
 
-const Papers = () => {
+const Papers = ({publications}) => {
     const [ displayAbstract, setDisplayAbstract ] = useState(false);
     const [ buttonId, setbuttonId ] = useState('');
-    const { publications } = useContext(MainContext);
 
     const handleClick = (e) => {
         if (buttonId === '' || buttonId !== e.target.parentElement.id) {

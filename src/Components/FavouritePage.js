@@ -6,7 +6,6 @@ import { MainContext } from "./Main";
 const FavouritePage = () => {
     const pubArray = [];
     const { favList, handleLikeOrSave, savedList }= useContext(MainContext);
-
     // loop through each item that has been saved as favourite in firebase, and if its not the placeholder, then add it to pubArray and display to the page
     favList.forEach((favItem)=> {
        if (favItem.key !== 'placeholder') {

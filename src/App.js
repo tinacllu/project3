@@ -4,6 +4,7 @@ import logo from './assets/logo.png';
 
 // import Components
 import Main from './Components/Main';
+import Login from './Components/Login';
 
 // import npm modules
 import { Link } from 'react-router-dom';
@@ -22,6 +23,8 @@ function App() {
         
         <div className="about">
           <p>Welcome to SciLib - a library to browse and save your favourite scientific literature from Springer Open Access! To get started, simply select a subject of interest from the dropdown menu to see recent papers related to that subject. To find a specific paper, try the Advanced Search option. </p>
+          <p>To curate and save your personal list, <Link className='account' to='/login'>Log In</Link> or <Link className='account' to='/login'>Create an Account</Link></p>
+          <p>No account, no problem - Continue as Guest </p>
           <p>Happy reading!</p>
         </div>
         

@@ -86,13 +86,10 @@ const Main = () => {
             modifiedApiData.push({...object, favStatus: true, savedStatus: false});
           } else if (!favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)) {
             modifiedApiData.push({...object, favStatus: false, savedStatus: true});
-          } else {
-            console.log("there's another condition!")
           }
         })
         setPublications(modifiedApiData);
         setShowLoading(false);
-        console.log(publications);
       }).catch(() => {
         alert('Oh no - something went wrong! Please try again later :( ');
         setShowLoading(true);
