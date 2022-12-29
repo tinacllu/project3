@@ -13,6 +13,31 @@ const Login = ( { handleLogIn, setAccountDetails, accountDetails } ) => {
 
     const navigate = useNavigate();
 
+    const matchLogin = () => {
+        const database = getDatabase(firebaseConfig);
+        const databaseRef = ref(database);
+        onValue(databaseRef, (response) => {
+            for (let key in response.val()) {
+                if (key === username && Object.values(response.val()[key]['account'])[0].password === password) {
+                    console.log('log in successful');
+                    // setAccountDetails({username: username, password: password});
+                    // handleLogIn(username, password)
+                    // navigate(`/${username}`);
+                } else {
+                    console.log('username or password is wrong')
+                }
+            }
+        })
+    }
+
+    const matchAccount = () => {
+        const database = getDatabase(firebaseConfig);
+        const databaseRef = ref(database);
+        onValue(databaseRef, (response) => {
+            for (let key in response.val()) {}
+        })
+    }
+
     const checkCredentials = (e, username, password) => {
         e.preventDefault();
         

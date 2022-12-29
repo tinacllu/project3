@@ -5,13 +5,12 @@ import { MainContext } from "./Main";
 
 const SavedPage = () => {
     const pubArray = [];
-    const { favList, handleLikeOrSave, savedList }= useContext(MainContext);
+    const { favList, handleLikeOrSave, savedList, accountDetails }= useContext(MainContext);
 
     savedList.forEach((savedItem)=> {
-        if (savedItem.key !== 'placeholder') {
-         pubArray.push({...savedItem.name, savedStatus: true}); 
-        }
-     });
+        pubArray.push({...savedItem.name, savedStatus: true}); 
+        });
+
 
     return(
         <section className="savedPage wrapper">

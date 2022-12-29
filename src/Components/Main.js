@@ -27,7 +27,7 @@ const Main = () => {
   const [ favList, setFavList ] = useState([]);
   const [ savedList, setSavedList ] = useState([]);
   const [ loggedIn, setLoggedIn ] = useState(false);
-  const [ accountDetails, setAccountDetails ] = useState({username: 'guest', password: 'guest123'});
+  const [ accountDetails, setAccountDetails ] = useState({username: '', password: ''});
 
 
   // on user login/created an account, save their usernames within firebase
@@ -127,7 +127,7 @@ const Main = () => {
   useEffect(() => {
     getFirebaseData('favourites');
     getFirebaseData('saved');
-  }, []);
+  }, [accountDetails.username]);
 
   const getFirebaseData = (location) => {
     const database = getDatabase(firebaseConfig);
@@ -200,6 +200,7 @@ const Main = () => {
   //********************************
 
   const context = {
+    accountDetails:accountDetails,
     favList:favList,
     handleLikeOrSave:handleLikeOrSave,
     savedList:savedList,
@@ -226,8 +227,8 @@ const Main = () => {
             <i className="fa-solid fa-heart"></i>
             <h3>Favourites (
                 {
-                  favList.length - 1>= 0
-                    ? (favList.length - 1)
+                  favList.length >= 0
+                    ? (favList.length)
                     : null
                 }
               )</h3>
@@ -236,8 +237,8 @@ const Main = () => {
             <i className='fa-solid fa-bookmark'></i>
             <h3>Saved (
               {
-                  savedList.length - 1>= 0
-                    ? (savedList.length - 1)
+                  savedList.length >= 0
+                    ? (savedList.length)
                     : null
                 }
               )</h3>
@@ -247,7 +248,7 @@ const Main = () => {
     
     <MainContext.Provider value={context} >
       <Routes>
-        <Route path='/' element={ <LandingPage /> }></Route>
+        <Route path='/' element={ <LandingPage setAccountDetails={setAccountDetails} /> }></Route>
         <Route path='/login' element={ <Login handleLogIn={handleLogIn} setAccountDetails={setAccountDetails} accountDetails={accountDetails}/> }></Route>
         <Route path={`/${accountDetails.username}`} element={ <SearchPage 
           publications={publications} 
