@@ -5,11 +5,11 @@ import { MainContext } from "./Main";
 
 const SavedPage = () => {
     const pubArray = [];
-    const { favList, handleLikeOrSave, savedList, accountDetails }= useContext(MainContext);
+    const { favList, handleLikeOrSave, savedList }= useContext(MainContext);
 
     savedList.forEach((savedItem)=> {
         pubArray.push({...savedItem.name, savedStatus: true}); 
-        });
+    });
 
 
     return(

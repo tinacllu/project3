@@ -12,7 +12,7 @@ import firebaseConfig from './Firebase';
 //import npm modules
 import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
-import { getDatabase, ref, onValue, push, remove} from 'firebase/database';
+import { getDatabase, ref, onValue, push, remove, get, child} from 'firebase/database';
 import { Link, Routes, Route, useNavigate } from 'react-router-dom';
 
 export const MainContext = createContext();
@@ -40,13 +40,20 @@ const Main = () => {
 
   useEffect(() => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/${accountDetails.username}/account`);
+    // const databaseRef = ref(database, `/${accountDetails.username}/account`);
     // only add account details if it doesn't already exist 
-    onValue(databaseRef, (response) => {
-      if (!response.val()) {
-        push(databaseRef, accountDetails);
+
+    const databaseRef = ref(database, `/${accountDetails.username}`);
+
+    const childRef = ref(database, `/${accountDetails.username}/account`);
+    get(child(databaseRef, 'account')).then((snapshot) => {
+      if (!snapshot.exists()) {
+          push(childRef, accountDetails);
       }
-    });
+    }).catch((error) => {
+      console.log(error);
+      alert('Oh no! Something went wrong!');
+  });
   }, [accountDetails])
 
   // save search parameters inputted by user into a stateful variable

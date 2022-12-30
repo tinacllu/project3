@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import firebaseConfig from './Firebase';
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { getDatabase, ref, onValue, get, child } from 'firebase/database';
 
 const Login = ( { handleLogIn, setAccountDetails, accountDetails, setLoggedIn } ) => {
     const [ login, setLogin ] = useState(true);
@@ -16,21 +16,44 @@ const Login = ( { handleLogIn, setAccountDetails, accountDetails, setLoggedIn } 
     const matchLogin = () => {
         const database = getDatabase(firebaseConfig);
         const databaseRef = ref(database);
-        onValue(databaseRef, (response) => {
-            for (let key in response.val()) {
-                if (key === username && Object.values(response.val()[key]['account'])[0].password === password) {
+        // onValue(databaseRef, (response) => {
+        //     for (let key in response.val()) {
+        //         if (key === username && Object.values(response.val()[key]['account'])[0].password === password) {
+        //             console.log('log in successful');
+        //             setAccountDetails({username: username, password: password});
+        //             handleLogIn(username, password);
+        //             navigate(`/${username}`);
+        //             setValidAccount(true);
+        //             setLoggedIn(true);
+        //             break;
+        //         } else {
+        //             console.log('username or password is wrong')
+        //             setValidAccount(false);
+        //         }
+        //     }
+        // })
+
+        get(child(databaseRef, `/${username}/account`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                console.log(snapshot.val());
+                const dbPassword = Object.values(snapshot.val())[0].password;
+                const dbUsername = Object.values(snapshot.val())[0].username;
+                if (dbUsername === username && dbPassword === password) {
                     console.log('log in successful');
                     setAccountDetails({username: username, password: password});
                     handleLogIn(username, password);
                     navigate(`/${username}`);
                     setValidAccount(true);
                     setLoggedIn(true);
-                    break;
-                } else {
-                    console.log('username or password is wrong')
-                    setValidAccount(false);
                 }
             }
+            else {
+                console.log('username or password is wrong')
+                setValidAccount(false);
+            }
+        }).catch((error) => {
+            console.log(error);
+            alert('Oh no! Something went wrong!');
         })
     }
 
@@ -38,29 +61,51 @@ const Login = ( { handleLogIn, setAccountDetails, accountDetails, setLoggedIn } 
         let match = false;
         const database = getDatabase(firebaseConfig);
         const databaseRef = ref(database);
-        onValue(databaseRef, (response) => {
-            for (let key in response.val()) {
-                if (key === username) {
+        // onValue(databaseRef, (response) => {
+        //     for (let key in response.val()) {
+        //         if (key === username) {
+        //             console.log('please pick another username');
+        //             match = true;
+        //             setValidAccount(false);
+        //             break;
+        //         }
+        //     }
+        // })
+        // if (!match) {
+        //     console.log('account successfully created', username)
+        //     setAccountDetails({username: username, password: password});
+        //     handleLogIn(username, password)
+        //     navigate(`/${username}`);
+        //     setValidAccount(true);
+        //     setLoggedIn(true);
+        // }
+
+        get(child(databaseRef, `/${username}/account`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                console.log(snapshot.val());
+                const dbUsername = Object.values(snapshot.val())[0].username;
+                if (dbUsername === username) {
                     console.log('please pick another username');
                     match = true;
                     setValidAccount(false);
-                    break;
                 }
-            }
-            if (!match) {
-                console.log('account successfully created')
+            } else {
+                console.log('account successfully created', username)
                 setAccountDetails({username: username, password: password});
                 handleLogIn(username, password)
                 navigate(`/${username}`);
                 setValidAccount(true);
                 setLoggedIn(true);
             }
+        }).catch((error) => {
+            console.log(error);
+            alert('Oh no! Something went wrong!');
         })
     }
 
     const checkCredentials = (e) => {
         e.preventDefault();
-        
+
         if (login) {
             matchLogin();
         } else {
