@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const LandingPage = ( { setAccountDetails }) => {
   return (
-    <div className="about">
+    <div className="about wrapper">
         <p>Welcome to SciLib - a library to browse and save your favourite scientific literature from Springer Open Access! To get started, simply select a subject of interest from the dropdown menu to see recent papers related to that subject. To find a specific paper, try the Advanced Search option. </p>
         <p>To curate and save your personal list of papers for future sessions:</p>
         <Link className='account' to='/login'>Log In / Create an Account</Link>

@@ -2,7 +2,11 @@ import SearchForm from './SearchForm';
 import Papers from './Papers';
 import ChangePage from './ChangePage';
 
-const SearchPage = ({ publications, newSearch, numResults, showLoading, apiQuery}) => {
+import { useContext } from "react";
+import { MainContext } from '../App';
+
+const SearchPage = () => {
+    const { publications, newSearch, numResults, showLoading, apiQuery}= useContext(MainContext);
 
     return(
         <section className='searchPage wrapper'>

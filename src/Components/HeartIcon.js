@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { MainContext } from './Main';
+import { MainContext } from '../App';
 
 const HeartIcon = ( {publication}) => {
     const [ liked, setLiked ] = useState(false);

@@ -1,7 +1,7 @@
 import Papers from "./Papers";
 
 import { useContext } from "react";
-import { MainContext } from "./Main";
+import { MainContext } from '../App';
 
 const SavedPage = () => {
     const pubArray = [];

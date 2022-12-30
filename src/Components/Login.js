@@ -3,35 +3,20 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import firebaseConfig from './Firebase';
-import { getDatabase, ref, onValue, get, child } from 'firebase/database';
+import { getDatabase, ref, get, child } from 'firebase/database';
 
-const Login = ( { handleLogIn, setAccountDetails, accountDetails, setLoggedIn } ) => {
+const Login = ( { setAccountDetails, setLoggedIn } ) => {
     const [ login, setLogin ] = useState(true);
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ validAccount, setValidAccount ] = useState(true);
+    const [ validUsername, setValidUsername ] = useState(true);
 
     const navigate = useNavigate();
 
     const matchLogin = () => {
         const database = getDatabase(firebaseConfig);
         const databaseRef = ref(database);
-        // onValue(databaseRef, (response) => {
-        //     for (let key in response.val()) {
-        //         if (key === username && Object.values(response.val()[key]['account'])[0].password === password) {
-        //             console.log('log in successful');
-        //             setAccountDetails({username: username, password: password});
-        //             handleLogIn(username, password);
-        //             navigate(`/${username}`);
-        //             setValidAccount(true);
-        //             setLoggedIn(true);
-        //             break;
-        //         } else {
-        //             console.log('username or password is wrong')
-        //             setValidAccount(false);
-        //         }
-        //     }
-        // })
 
         get(child(databaseRef, `/${username}/account`)).then((snapshot) => {
             if (snapshot.exists()) {
@@ -41,7 +26,6 @@ const Login = ( { handleLogIn, setAccountDetails, accountDetails, setLoggedIn } 
                 if (dbUsername === username && dbPassword === password) {
                     console.log('log in successful');
                     setAccountDetails({username: username, password: password});
-                    handleLogIn(username, password);
                     navigate(`/${username}`);
                     setValidAccount(true);
                     setLoggedIn(true);
@@ -58,27 +42,8 @@ const Login = ( { handleLogIn, setAccountDetails, accountDetails, setLoggedIn } 
     }
 
     const matchAccount = () => {
-        let match = false;
         const database = getDatabase(firebaseConfig);
         const databaseRef = ref(database);
-        // onValue(databaseRef, (response) => {
-        //     for (let key in response.val()) {
-        //         if (key === username) {
-        //             console.log('please pick another username');
-        //             match = true;
-        //             setValidAccount(false);
-        //             break;
-        //         }
-        //     }
-        // })
-        // if (!match) {
-        //     console.log('account successfully created', username)
-        //     setAccountDetails({username: username, password: password});
-        //     handleLogIn(username, password)
-        //     navigate(`/${username}`);
-        //     setValidAccount(true);
-        //     setLoggedIn(true);
-        // }
 
         get(child(databaseRef, `/${username}/account`)).then((snapshot) => {
             if (snapshot.exists()) {
@@ -86,13 +51,11 @@ const Login = ( { handleLogIn, setAccountDetails, accountDetails, setLoggedIn } 
                 const dbUsername = Object.values(snapshot.val())[0].username;
                 if (dbUsername === username) {
                     console.log('please pick another username');
-                    match = true;
                     setValidAccount(false);
                 }
             } else {
                 console.log('account successfully created', username)
                 setAccountDetails({username: username, password: password});
-                handleLogIn(username, password)
                 navigate(`/${username}`);
                 setValidAccount(true);
                 setLoggedIn(true);
@@ -103,31 +66,53 @@ const Login = ( { handleLogIn, setAccountDetails, accountDetails, setLoggedIn } 
         })
     }
 
-    const checkCredentials = (e) => {
+    const checkCredentials = (e, username) => {
         e.preventDefault();
-
-        if (login) {
-            matchLogin();
+        if (checkUserName(username)) {
+            if (login) {
+                matchLogin();
+            } else {
+                matchAccount();
+            }
         } else {
-            matchAccount();
+            console.log('pick a new one')
+            setValidUsername(false);
         }
+
+        
 
         setUsername('');
         setPassword('');
     }
 
+    const checkUserName = (username) => {
+        // const regex = /^[ A-Za-z0-9_+-]+$/;
+        if (username.match(/^[ A-Za-z0-9_+-]+$/)) {
+            return true
+
+        } else {
+            return false
+        }
+
+
+    }
     return (
         <section className="loginPage">
             <div className="contentContainer">
                 <Link className='exit' to='/'>
                     <i className="fa-solid fa-x"></i>
                 </Link>
-                <form onSubmit={(e) => {checkCredentials(e)}}>
+                <form onSubmit={(e) => {checkCredentials(e, username)}}>
                     <fieldset className='inputs'>
                         <label htmlFor='username'>Username:</label>
                         <input type='text' id='username' required value={username} onChange={(e) => {setUsername(e.target.value)}}></input>
+                        {
+                            !validUsername
+                                ? <p>Username cannot contain special characters. Please try again.</p>
+                                : null
+                        }
                         <label htmlFor='password'>Password:</label>
-                        <input type='password' id='password' required value={password} onChange={(e) => {setPassword(e.target.value)}}></input>
+                        <input type='password' id='password' minLength='6' required value={password} onChange={(e) => {setPassword(e.target.value)}}></input>
                     </fieldset>
                         {login
                             ? <button type='submit' className='submitLogin'>Log In</button>
