@@ -38,3 +38,7 @@ p {
 .bold {
     font-weight:500;
 }
+
+.smallFont {
+    font-size: clamp(0.9rem, 1.25vw, 1.1rem);
+}

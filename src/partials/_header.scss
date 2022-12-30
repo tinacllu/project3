@@ -6,11 +6,20 @@ header {
     flex-direction: column;
     padding: 20px 0;
     color: $white;
+    .loginButton {
+        color: $darkGray;
+        align-self: flex-end;
+        background-color: $lightBlue;
+        transition: 0.3s;
+        &:hover, &:focus {
+            text-decoration: underline;
+        }
+    }
     .h1Container {
         display: flex;
         width: fit-content;
         align-items: center;
-        margin-top: 25px;
+        background-color: transparent;
         h1 {
             margin: 0 25px;
             @include mobile {
@@ -25,7 +34,17 @@ header {
             min-width: 80px;
         }
     }
-    .about {
-        margin: 15px 0;
+
+    .welcomeMessage {
+        margin: 10px;
+    }
+}
+
+.landingPage {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    .accountLink {
+        margin-bottom: 10px;
     }
 }

@@ -27,11 +27,13 @@
         background-color: $lightBlue;
         border-radius: 10px;
         width: 50vw;
+        display: flex;
+        flex-direction: column;
     }
     .exit {
-        display: flex;
-        justify-content: flex-end;
-        background-color: transparent;
+        margin: 5px;
+        align-self: flex-end;
+        width: fit-content;
         i {
             color: $darkGray;
             transition: 0.3s;
@@ -41,18 +43,19 @@
             }
         }
     }
-    form, .switch {
+    form, .switch, .errorMessage {
         display: flex;
         flex-direction: column;
         padding: 15px 50px;
         width: 100%;
+
+    }
+    form {
         fieldset {
             all: unset;
             display: flex;
             flex-direction: column;
         }
-    }
-    form {
         label {
             margin-bottom: 5px;
             margin-left: 5px;
@@ -62,10 +65,14 @@
         }
         .submitLogin {
             margin: 5px;
-            padding: 10px;
+            padding: 10px 20px;
             width: 50%;
             min-width: fit-content;
             align-self: center;
+        }
+        .warning {
+            color: red;
+            margin-left: 5px;
         }
     }
 
@@ -80,4 +87,7 @@
         }
     }
 
+    .errorMessage {
+        color: red;
+    }
 }

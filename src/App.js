@@ -203,6 +203,15 @@ const Main = () => {
   // FIREBASE
   //********************************
 
+  const handleHomeNavigation = () => {
+    if (accountDetails.username === 'guest') {
+      setAccountDetails({username:'', password:''});
+      navigate('/');
+    } else if (accountDetails.username) {
+      navigate(`/${accountDetails.username}`);
+    }
+  }
+
   const context = {
     accountDetails:accountDetails,
     favList:favList,
@@ -218,40 +227,39 @@ const Main = () => {
     apiQuery:apiQuery,
     }
 
-  const handleHomeNavigation = () => {
-    if (accountDetails.username === 'guest') {
-      setAccountDetails({username:'', password:''});
-      navigate('/');
-    } else if (accountDetails.username) {
-      navigate(`/${accountDetails.username}`);
-    }
-  }
+
   return (
     <>
-    <header className='wrapper'>
-      {
-        loggedIn
-          ?<button onClick={() => {setLoggedIn(false); setAccountDetails({username:'', password:''}); navigate('/');}}>Log Out</button>
-          :<button onClick={() => {navigate('/login')}} >Log In</button>
-      }
 
-      <button className='h1Container' onClick={() => handleHomeNavigation()}>
-        <div className='logoContainer'>
-          <img src={logo} alt='illustration of three test tubes' />
-        </div>
-        <h1>SciLib</h1>
-      </button>
-    </header>
 
     <main>
-      <section className='wrapper'>
+      <header className='wrapper'>
+        {
+          loggedIn
+            ?<button className='loginButton smallFont' onClick={() => {setLoggedIn(false); setAccountDetails({username:'', password:''}); navigate('/');}}>Log Out</button>
+            :<button className='loginButton smallFont' onClick={() => {navigate('/login')}} >Log In / Sign Up</button>
+        }
 
-
+        <button className='h1Container' onClick={() => handleHomeNavigation()}>
+          <div className='logoContainer'>
+            <img src={logo} alt='illustration of three test tubes' />
+          </div>
+          <h1>SciLib</h1>
+        </button>
         {
           accountDetails.username
-            ?<p>Welcome {accountDetails.username}</p>
+            ? accountDetails.username !== 'guest'
+              ?<div className='welcomeMessage'><h2>Welcome {accountDetails.username}!</h2><p>What would you like to read about today?</p></div>
+              :<div className='guestMessage'>
+                <p>Welcome! You are using a guest account.</p>
+                <p> To get started, simply select a subject of interest from the dropdown menu to see recent papers related to that subject. To find a specific paper, try the Advanced Search option.</p>
+                <p>To save your papers for future sessions, please <Link className='account' to='/login'>Log In / Sign Up.</Link></p></div>
             :null
         }
+      </header>
+
+      <section className='wrapper'>
+
 
         {
           accountDetails.username
@@ -291,7 +299,7 @@ const Main = () => {
     <MainContext.Provider value={context} >
       <Routes>
         <Route path='/' element={ <LandingPage setAccountDetails={setAccountDetails} /> }></Route>
-        <Route path='/login' element={ <Login setAccountDetails={setAccountDetails} setLoggedIn={setLoggedIn}/> }></Route>
+        <Route path='/login' element={ <Login accountDetails={accountDetails} setAccountDetails={setAccountDetails} setLoggedIn={setLoggedIn}/> }></Route>
         <Route path={`/${accountDetails.username}`} element={ <SearchPage /> } />
         <Route path={`/${accountDetails.username}/favourites`} element={ <FavouritePage /> } />
         <Route path={`/${accountDetails.username}/saved`} element={ <SavedPage /> } />
@@ -300,7 +308,7 @@ const Main = () => {
       </MainContext.Provider>
     </main>
 
-    <footer>Created by <a href='https://www.tinalu.ca/' target="_blank" rel="noreferrer">Tina Lu</a> at <a href='https://junocollege.com/' target="_blank" rel="noreferrer">Juno College</a></footer>
+    <footer className='smallFont'>Created by <a href='https://www.tinalu.ca/' target="_blank" rel="noreferrer">Tina Lu</a> at <a href='https://junocollege.com/' target="_blank" rel="noreferrer">Juno College</a></footer>
     </>
   );
 }

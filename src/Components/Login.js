@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import firebaseConfig from './Firebase';
 import { getDatabase, ref, get, child } from 'firebase/database';
 
-const Login = ( { setAccountDetails, setLoggedIn } ) => {
+const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
     const [ login, setLogin ] = useState(true);
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
@@ -29,6 +29,8 @@ const Login = ( { setAccountDetails, setLoggedIn } ) => {
                     navigate(`/${username}`);
                     setValidAccount(true);
                     setLoggedIn(true);
+                } else {
+                    setValidAccount(false);
                 }
             }
             else {
@@ -77,40 +79,37 @@ const Login = ( { setAccountDetails, setLoggedIn } ) => {
         } else {
             console.log('pick a new one')
             setValidUsername(false);
+            setValidAccount(true);
         }
-
-        
 
         setUsername('');
         setPassword('');
     }
 
     const checkUserName = (username) => {
-        // const regex = /^[ A-Za-z0-9_+-]+$/;
         if (username.match(/^[ A-Za-z0-9_+-]+$/)) {
             return true
-
         } else {
             return false
         }
-
-
     }
+
     return (
         <section className="loginPage">
             <div className="contentContainer">
-                <Link className='exit' to='/'>
+                <Link className='exit' to={`/${accountDetails.username}`}>
                     <i className="fa-solid fa-x"></i>
                 </Link>
                 <form onSubmit={(e) => {checkCredentials(e, username)}}>
                     <fieldset className='inputs'>
-                        <label htmlFor='username'>Username:</label>
-                        <input type='text' id='username' required value={username} onChange={(e) => {setUsername(e.target.value)}}></input>
                         {
-                            !validUsername
-                                ? <p>Username cannot contain special characters. Please try again.</p>
+                            !validUsername && !login && validAccount
+                                ? <p className='warning smallFont'>*Username cannot contain special characters. Please try again.</p>
                                 : null
                         }
+                        <label htmlFor='username'>Username:</label>
+                        <input type='text' id='username' required value={username} onChange={(e) => {setUsername(e.target.value)}}></input>
+
                         <label htmlFor='password'>Password:</label>
                         <input type='password' id='password' minLength='6' required value={password} onChange={(e) => {setPassword(e.target.value)}}></input>
                     </fieldset>
@@ -119,18 +118,19 @@ const Login = ( { setAccountDetails, setLoggedIn } ) => {
                             : <button type='submit' className='submitLogin'>Create Account</button>}
                 </form>
                 
-                {validAccount
-                    ?null
-                    :login
-                        ?<p>username or password is wrong. Please try again.</p>
-                        :<p>username already exists. Please choose another username.</p>}
+                {!validAccount
+                    ?login
+                        ?<p className='errorMessage smallFont'>*Username or password is wrong. Please try again.</p>
+                        :<p className='errorMessage smallFont'>*Username already exists. Please choose another username.</p>
+                    :null
+                }
 
                 {login
-                    ?<div className='switch'>
+                    ?<div className='switch smallFont'>
                         <p>Don't have an account?</p>
-                        <button onClick={() => setLogin(!login)}>Create an Account</button>
+                        <button onClick={() => {setLogin(!login); setValidAccount(true); setValidUsername(true)}}>Create an Account</button>
                     </div>
-                    :<div className='switch'>
+                    :<div className='switch smallFont'>
                         <p>Already have an account?</p>
                         <button onClick={() => {setLogin(!login); setValidAccount(true)}}>Log In</button>
                     </div>}
