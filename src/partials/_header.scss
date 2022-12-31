@@ -14,12 +14,16 @@ header {
         &:hover, &:focus {
             text-decoration: underline;
         }
+        @include largeMobile {
+            margin-bottom: 15px;
+        }
     }
     .h1Container {
         display: flex;
         width: fit-content;
         align-items: center;
         background-color: transparent;
+        padding: 10px 0;
         h1 {
             margin: 0 25px;
             @include mobile {
@@ -40,6 +44,10 @@ header {
 
     .welcomeMessage {
         margin: 10px;
+    }
+
+    .guestMessage {
+        margin-bottom: 20px;
     }
 }
 

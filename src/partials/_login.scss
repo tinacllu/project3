@@ -1,7 +1,6 @@
 @use './variables' as *;
 @use './mixins' as *;
 
-
 .account {
  background-color: $yellow;
  color: $darkGray;
@@ -29,6 +28,12 @@
         width: 50vw;
         display: flex;
         flex-direction: column;
+        @include smallTablet {
+            width:75vw;
+        }
+        @include mobile {
+            width: 90vw;
+        }
     }
     .exit {
         margin: 5px;
@@ -69,6 +74,10 @@
             width: 50%;
             min-width: fit-content;
             align-self: center;
+            @include mobile {
+                align-self: flex-start;
+                margin-left: 0;
+            }
         }
         .warning {
             color: red;

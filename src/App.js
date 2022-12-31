@@ -10,23 +10,19 @@ import Error404 from './Components/Error404';
 import Login from './Components/Login';
 import LandingPage from './Components/LandingPage';
 
-// config
+// firebase
 import firebaseConfig from './Components/Firebase';
+import { getDatabase, ref, onValue, push, remove, get, child} from 'firebase/database';
 
 //import npm modules
 import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
-import { getDatabase, ref, onValue, push, remove, get, child} from 'firebase/database';
-import { Link, Routes, Route, useNavigate, useParams} from 'react-router-dom';
+import { Link, Routes, Route, useNavigate } from 'react-router-dom';
 
 export const MainContext = createContext();
 
 //TODOS
-//fix link routing when pge refreshes (useparams?)
-//remove firebase guest info when window is closed (beforeunload)
-//mobile styling (and fix uneven box and tab)
 //custom hooks to clean up App.js
-
 
 const Main = () => {
 
@@ -43,14 +39,19 @@ const Main = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-
+    //clean up function to remove guest info on page exit/refresh
+    return () => {
+      const database = getDatabase(firebaseConfig);
+      const databaseRef = ref(database, `/guest`);
+      remove(databaseRef);
+    }
   }, []);
 
   useEffect(() => {
     const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/${accountDetails.username}`);
     const childRef = ref(database, `/${accountDetails.username}/account`);
-    
+
     if (accountDetails.username && accountDetails.username!== 'guest') {
       //check if username and password are already stored in account details in firebase, if not, add it, if so, don't add it
       get(child(databaseRef, 'account')).then((snapshot) => {
@@ -266,11 +267,16 @@ const Main = () => {
         {
           accountDetails.username
             ? accountDetails.username !== 'guest'
-              ?<div className='welcomeMessage'><h2>Welcome {accountDetails.username}!</h2><p>What would you like to read about today?</p></div>
+              ?<div className='welcomeMessage'>
+                <h2>Welcome {accountDetails.username}!</h2>
+                <p>What would you like to read about today?</p>
+                </div>
               :<div className='guestMessage'>
                 <p>Welcome! You are using a guest account.</p>
                 <p> To get started, simply select a subject of interest from the dropdown menu to see recent papers related to that subject. To find a specific paper, try the Advanced Search option.</p>
-                <p>To save your papers for future sessions, please <Link className='account' to='/login'>Log In / Sign Up.</Link></p></div>
+                <p>To save your papers for future sessions, please </p>
+                <Link className='account' to='/login'>Log In / Sign Up.</Link>
+                </div>
             :null
         }
       </header>
@@ -288,7 +294,7 @@ const Main = () => {
                   </Link> 
                   <Link className="page favourites" to={`/${accountDetails.username}/favourites`}>
                     <i className="fa-solid fa-heart"></i>
-                    <h3>Favourites (
+                    <h3>Fav<span className='fullWord'>ourites</span> (
                         {
                           favList.length >= 0
                             ? (favList.length)
