@@ -17,12 +17,19 @@ import firebaseConfig from './Components/Firebase';
 import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
 import { getDatabase, ref, onValue, push, remove, get, child} from 'firebase/database';
-import { Link, Routes, Route, useNavigate } from 'react-router-dom';
+import { Link, Routes, Route, useNavigate, useParams} from 'react-router-dom';
 
 export const MainContext = createContext();
 
+//TODOS
+//fix link routing when pge refreshes (useparams?)
+//remove firebase guest info when window is closed (beforeunload)
+//mobile styling (and fix uneven box and tab)
+//custom hooks to clean up App.js
+
+
 const Main = () => {
-    
+
   const [ publications, setPublications ] = useState([]);
   const [ apiQuery, setApiQuery ] = useState('');
   const [ numResults, setNumResults] = useState(1);
@@ -31,25 +38,34 @@ const Main = () => {
   const [ favList, setFavList ] = useState([]);
   const [ savedList, setSavedList ] = useState([]);
   const [ loggedIn, setLoggedIn ] = useState(false);
-  const [ accountDetails, setAccountDetails ] = useState({username: '', password: ''});
-
+  const [ accountDetails, setAccountDetails ] = useState({username: '', password: ''}); //put useParams as username
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+
+  }, []);
 
   useEffect(() => {
     const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/${accountDetails.username}`);
     const childRef = ref(database, `/${accountDetails.username}/account`);
+    
+    if (accountDetails.username && accountDetails.username!== 'guest') {
+      //check if username and password are already stored in account details in firebase, if not, add it, if so, don't add it
+      get(child(databaseRef, 'account')).then((snapshot) => {
+        if (!snapshot.exists()) {
+            push(childRef, accountDetails);
+        }
+      }).catch((error) => {
+        console.log(error);
+        alert('Oh no! Something went wrong!');
+      });
 
-    //check if username and password are already stored in account details in firebase, if not, add it, if so, don't add it
-    get(child(databaseRef, 'account')).then((snapshot) => {
-      if (!snapshot.exists()) {
-          push(childRef, accountDetails);
-      }
-    }).catch((error) => {
-      console.log(error);
-      alert('Oh no! Something went wrong!');
-  });
+    // make sure loggedIn state matches with accountDetails state on page refresh
+      setLoggedIn(true);
+    } 
+
   }, [accountDetails])
 
   // save search parameters inputted by user into a stateful variable
@@ -214,6 +230,7 @@ const Main = () => {
 
   const context = {
     accountDetails:accountDetails,
+    setAccountDetails:setAccountDetails,
     favList:favList,
     handleLikeOrSave:handleLikeOrSave,
     savedList:savedList,
@@ -300,9 +317,12 @@ const Main = () => {
       <Routes>
         <Route path='/' element={ <LandingPage setAccountDetails={setAccountDetails} /> }></Route>
         <Route path='/login' element={ <Login accountDetails={accountDetails} setAccountDetails={setAccountDetails} setLoggedIn={setLoggedIn}/> }></Route>
-        <Route path={`/${accountDetails.username}`} element={ <SearchPage /> } />
+        {/* <Route path={`/${accountDetails.username}`} element={ <SearchPage /> } />
         <Route path={`/${accountDetails.username}/favourites`} element={ <FavouritePage /> } />
-        <Route path={`/${accountDetails.username}/saved`} element={ <SavedPage /> } />
+        <Route path={`/${accountDetails.username}/saved`} element={ <SavedPage /> } /> */}
+        <Route path=':paramsUsername' element={ <SearchPage /> } />
+        <Route path={`/:paramsUsername/favourites`} element={ <FavouritePage /> } />
+        <Route path={`/:paramsUsername/saved`} element={ <SavedPage /> } />
         <Route path='*' element={ <Error404 /> } />
       </Routes>
       </MainContext.Provider>

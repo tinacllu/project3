@@ -1,16 +1,23 @@
 import Papers from "./Papers";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { MainContext } from '../App';
+import { useParams } from "react-router-dom";
 
 const SavedPage = () => {
     const pubArray = [];
-    const { favList, handleLikeOrSave, savedList }= useContext(MainContext);
+    const { paramsUsername } = useParams();
+    const { favList, handleLikeOrSave, savedList, setAccountDetails, accountDetails }= useContext(MainContext);
+
+    useEffect(() => {
+        if (!accountDetails.username) {
+            setAccountDetails({...accountDetails, username: paramsUsername})
+        }
+    }, []);
 
     savedList.forEach((savedItem)=> {
         pubArray.push({...savedItem.name, savedStatus: true}); 
     });
-
 
     return(
         <section className="savedPage wrapper">

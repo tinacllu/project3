@@ -14,6 +14,8 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
 
     const navigate = useNavigate();
 
+
+    // check if login credentials are correct
     const matchLogin = () => {
         const database = getDatabase(firebaseConfig);
         const databaseRef = ref(database);
@@ -43,6 +45,7 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
         })
     }
 
+    // check if inputted username is unique when creating an account
     const matchAccount = () => {
         const database = getDatabase(firebaseConfig);
         const databaseRef = ref(database);
@@ -68,6 +71,7 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
         })
     }
 
+    // check validity of account details and reset inputs
     const checkCredentials = (e, username) => {
         e.preventDefault();
         if (checkUserName(username)) {
@@ -86,6 +90,7 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
         setPassword('');
     }
 
+    // check if username contains firebase incompatible characters
     const checkUserName = (username) => {
         if (username.match(/^[ A-Za-z0-9_+-]+$/)) {
             return true

@@ -33,6 +33,9 @@ header {
             width: 25%;
             min-width: 80px;
         }
+        &:hover, &:focus {
+            transform: none;
+        }
     }
 
     .welcomeMessage {

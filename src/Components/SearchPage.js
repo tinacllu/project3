@@ -5,8 +5,18 @@ import ChangePage from './ChangePage';
 import { useContext } from "react";
 import { MainContext } from '../App';
 
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+
 const SearchPage = () => {
-    const { publications, newSearch, numResults, showLoading, apiQuery}= useContext(MainContext);
+    const { paramsUsername } = useParams();
+    const { publications, newSearch, numResults, showLoading, apiQuery, setAccountDetails, accountDetails}= useContext(MainContext);
+
+    useEffect(() => {
+        if (!accountDetails.username) {
+            setAccountDetails({...accountDetails, username: paramsUsername})
+        }
+    }, []);
 
     return(
         <section className='searchPage wrapper'>
