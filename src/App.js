@@ -59,7 +59,6 @@ const Main = () => {
             push(childRef, accountDetails);
         }
       }).catch((error) => {
-        console.log(error);
         alert('Oh no! Something went wrong!');
       });
 
@@ -94,7 +93,7 @@ const Main = () => {
     setNewSearch(false);
   }
 
-  // call the API based on user input
+  // call the API based on user input 
   useEffect (() => {
     if (apiQuery) {
       setShowLoading(true);
@@ -121,14 +120,20 @@ const Main = () => {
         });
 
         res.data.records.forEach((object) => {
-          if (favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)) {
-            modifiedApiData.push({...object, favStatus: true, savedStatus: true});
-          } else if (!favListDoiArray.includes(object.doi) && !savedListDoiArray.includes(object.doi)) {
-            modifiedApiData.push({...object, favStatus: false, savedStatus: false});
-          } else if (favListDoiArray.includes(object.doi) && !savedListDoiArray.includes(object.doi)) {
-            modifiedApiData.push({...object, favStatus: true, savedStatus: false});
-          } else if (!favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)) {
-            modifiedApiData.push({...object, favStatus: false, savedStatus: true});
+          switch (true) {
+            case (favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)): 
+              modifiedApiData.push({...object, favStatus: true, savedStatus: true});
+              break;
+            case (!favListDoiArray.includes(object.doi) && !savedListDoiArray.includes(object.doi)):
+              modifiedApiData.push({...object, favStatus: false, savedStatus: false});
+              break;
+            case (favListDoiArray.includes(object.doi) && !savedListDoiArray.includes(object.doi)):
+              modifiedApiData.push({...object, favStatus: true, savedStatus: false});
+              break;
+            case (!favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)):
+              modifiedApiData.push({...object, favStatus: false, savedStatus: true});
+              break;
+            default: alert('Something went wrong');
           }
         })
         setPublications(modifiedApiData);
@@ -138,6 +143,7 @@ const Main = () => {
         setShowLoading(true);
       });
     } 
+    // eslint-disable-next-line
   }, [apiQuery, numResults]);
 
   //********************************
@@ -148,6 +154,7 @@ const Main = () => {
   useEffect(() => {
     getFirebaseData('favourites');
     getFirebaseData('saved');
+    // eslint-disable-next-line
   }, [accountDetails.username]);
 
   const getFirebaseData = (location) => {
@@ -165,7 +172,7 @@ const Main = () => {
         setSavedList(newState);
       }
     });
-  }
+  };
   
   // add/remove items from firebase based on button click
   const handleLikeOrSave = (location, publication) => {

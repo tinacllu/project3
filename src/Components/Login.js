@@ -22,11 +22,9 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
 
         get(child(databaseRef, `/${username}/account`)).then((snapshot) => {
             if (snapshot.exists()) {
-                console.log(snapshot.val());
                 const dbPassword = Object.values(snapshot.val())[0].password;
                 const dbUsername = Object.values(snapshot.val())[0].username;
                 if (dbUsername === username && dbPassword === password) {
-                    console.log('log in successful');
                     setAccountDetails({username: username, password: password});
                     navigate(`/${username}`);
                     setValidAccount(true);
@@ -36,11 +34,9 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
                 }
             }
             else {
-                console.log('username or password is wrong')
                 setValidAccount(false);
             }
         }).catch((error) => {
-            console.log(error);
             alert('Oh no! Something went wrong!');
         })
     }
@@ -52,21 +48,17 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
 
         get(child(databaseRef, `/${username}/account`)).then((snapshot) => {
             if (snapshot.exists()) {
-                console.log(snapshot.val());
                 const dbUsername = Object.values(snapshot.val())[0].username;
                 if (dbUsername === username) {
-                    console.log('please pick another username');
                     setValidAccount(false);
                 }
             } else {
-                console.log('account successfully created', username)
                 setAccountDetails({username: username, password: password});
                 navigate(`/${username}`);
                 setValidAccount(true);
                 setLoggedIn(true);
             }
         }).catch((error) => {
-            console.log(error);
             alert('Oh no! Something went wrong!');
         })
     }
@@ -81,7 +73,6 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
                 matchAccount();
             }
         } else {
-            console.log('pick a new one')
             setValidUsername(false);
             setValidAccount(true);
         }
