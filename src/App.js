@@ -23,6 +23,7 @@ export const MainContext = createContext();
 
 //TODOS
 //custom hooks to clean up App.js
+// fix deployment errors on netlify
 
 const Main = () => {
 

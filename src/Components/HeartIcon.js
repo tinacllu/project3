@@ -17,6 +17,7 @@ const HeartIcon = ( {publication}) => {
         } else {
             setLiked(false);
         }
+        // eslint-disable-next-line
     }, [])
 
     return(

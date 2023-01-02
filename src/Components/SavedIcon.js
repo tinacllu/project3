@@ -17,6 +17,7 @@ const SavedIcon = ( {publication} ) => {
         } else {
             setSaved(false);
         }
+        // eslint-disable-next-line
     }, []);
 
     return(

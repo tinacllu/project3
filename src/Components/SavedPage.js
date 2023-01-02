@@ -13,7 +13,7 @@ const SavedPage = () => {
         if (!accountDetails.username) {
             setAccountDetails({...accountDetails, username: paramsUsername})
         }
-    }, []);
+    }, [accountDetails, paramsUsername, setAccountDetails]);
 
     savedList.forEach((savedItem)=> {
         pubArray.push({...savedItem.name, savedStatus: true}); 

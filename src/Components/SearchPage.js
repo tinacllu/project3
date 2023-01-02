@@ -16,7 +16,7 @@ const SearchPage = () => {
         if (!accountDetails.username) {
             setAccountDetails({...accountDetails, username: paramsUsername})
         }
-    }, []);
+    }, [accountDetails, paramsUsername, setAccountDetails]);
 
     return(
         <section className='searchPage wrapper'>

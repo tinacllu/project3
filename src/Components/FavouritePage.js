@@ -13,7 +13,7 @@ const FavouritePage = () => {
         if (!accountDetails.username) {
             setAccountDetails({...accountDetails, username: paramsUsername})
         }
-    }, []);
+    }, [accountDetails, paramsUsername, setAccountDetails]);
 
     // loop through each item that has been saved as favourite in firebase, then add it to pubArray and display to the page
     favList.forEach((favItem)=> {
