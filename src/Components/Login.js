@@ -32,8 +32,6 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
                     setValidAccount(true);
                     setLoggedIn(true);
                 } else {
-                    console.log(username, dbUsername, password, dbPassword)
-                    console.log('im the problem')
                     setValidAccount(false);
                 }
             }
@@ -61,6 +59,7 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
                     setAccountDetails({username: username, password: password});
                     navigate(`/${username}`);
                     setValidAccount(true);
+                    setValidPassword(true);
                     setLoggedIn(true);
                 } else {
                     console.log('help');
@@ -77,6 +76,7 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
     // check validity of account details and reset inputs
     const checkCredentials = (e, username) => {
         e.preventDefault();
+        setValidUsername(true);
         if (checkUserName(username)) {
             if (login) {
                 matchLogin();
