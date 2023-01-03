@@ -18,7 +18,7 @@ const SearchPage = () => {
 
     return(
         <section className='searchPage wrapper'>
-            <SearchForm getQueryParams={getQueryParams} setNewSearch={setNewSearch}/> 
+            <SearchForm /> 
             
             {
             // once API call is completed, show the results on the page
@@ -54,7 +54,7 @@ const SearchPage = () => {
             // when the API call has been completed, show page change buttons if the user has entered search parameters, otherwise, ask users to input desired search parameters if they are starting a new search
             !showLoading
                 ? apiQuery
-                    ? <ChangePage handleResultPages={handleResultPages} publications={publications} newSearch={newSearch} numResults={numResults} />
+                    ? <ChangePage />
                     : !newSearch
                         ? null
                         :<p className='wrapper'>Please enter your search parameters.</p>
