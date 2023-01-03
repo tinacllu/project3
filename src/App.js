@@ -27,7 +27,7 @@ export const MainContext = createContext();
 //custom hooks to clean up App.js
 // fix deployment errors on netlify
 
-const Main = () => {
+const App = () => {
 
   const [ publications, setPublications ] = useState([]);
   const [ apiQuery, setApiQuery ] = useState('');
@@ -327,7 +327,6 @@ const Main = () => {
               </>
             : null
         }
-        
       </section>
     
     <MainContext.Provider value={context} >
@@ -348,4 +347,4 @@ const Main = () => {
   );
 }
 
-export default Main;
+export default App;
