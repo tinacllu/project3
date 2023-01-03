@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { MainContext } from '../App';
 
 const SavedIcon = ({handleLikeOrSave, publication, savedList}) => {
     const [ saved, setSaved ] = useState(false);
@@ -15,10 +16,11 @@ const SavedIcon = ({handleLikeOrSave, publication, savedList}) => {
         } else {
             setSaved(false);
         }
+        // eslint-disable-next-line
     }, []);
 
     return(
-        <button onClick={() => {handleLikeOrSave('saved', publication); setSaved(!saved)}}>
+        <button title='Save' onClick={() => {handleLikeOrSave('saved', publication); setSaved(!saved)}}>
             {
                 saved 
                     ? <i className="fa-solid fa-bookmark"></i>

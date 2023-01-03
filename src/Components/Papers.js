@@ -3,10 +3,12 @@ import Abstract from './Abstract';
 import Authors from './Authors';
 import HeartIcon from './HeartIcon';
 import SavedIcon from './SavedIcon';
+// import NotesIcon from './NotesIcon';
 
-const Papers = ( { publications, handleLikeOrSave, favList, savedList } ) => {
+const Papers = ({publications}) => {
     const [ displayAbstract, setDisplayAbstract ] = useState(false);
     const [ buttonId, setbuttonId ] = useState('');
+
     const handleClick = (e) => {
         if (buttonId === '' || buttonId !== e.target.parentElement.id) {
             setbuttonId(e.target.parentElement.id);
@@ -38,8 +40,9 @@ const Papers = ( { publications, handleLikeOrSave, favList, savedList } ) => {
                                 </button>
                             </div>
                             <div className='icons'>
-                                <HeartIcon handleLikeOrSave={handleLikeOrSave} publication={publication} favList={favList}/>
-                                <SavedIcon handleLikeOrSave={handleLikeOrSave} publication={publication} savedList={savedList}/>
+                                <HeartIcon publication={publication} />
+                                <SavedIcon publication={publication} />
+                                {/* <NotesIcon publication={publication} /> */}
                             </div>
                         </div>
                         {

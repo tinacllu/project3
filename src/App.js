@@ -1,24 +1,34 @@
 // import styling
-import './App.scss';
 import logo from './assets/logo.png';
+import './App.scss';
 
 // import Components
-import SearchPage from './Components/SearchPage';
+import SearchPage from './Components/SearchPage'
 import FavouritePage from './Components/FavouritePage';
 import SavedPage from './Components/SavedPage'
 import Error404 from './Components/Error404';
+import Login from './Components/Login';
+import LandingPage from './Components/LandingPage';
+import SinglePaper from './Components/SinglePaper';
 
-// config
+// firebase
 import firebaseConfig from './Components/Firebase';
+import { getDatabase, ref, onValue, push, remove, get, child} from 'firebase/database';
 
 //import npm modules
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
-import { getDatabase, ref, onValue, push, remove} from 'firebase/database';
-import { Link, Routes, Route } from 'react-router-dom';
-// import { Value } from 'sass';
+import { Link, Routes, Route, useNavigate } from 'react-router-dom';
+import uuid from 'react-uuid';
 
-function App() {
+export const MainContext = createContext();
+
+//TODOS
+//custom hooks to clean up App.js
+// fix deployment errors on netlify
+
+const App = () => {
+
   const [ publications, setPublications ] = useState([]);
   const [ apiQuery, setApiQuery ] = useState('');
   const [ numResults, setNumResults] = useState(1);
@@ -26,6 +36,40 @@ function App() {
   const [ showLoading, setShowLoading ] = useState(false);
   const [ favList, setFavList ] = useState([]);
   const [ savedList, setSavedList ] = useState([]);
+  const [ loggedIn, setLoggedIn ] = useState(false);
+  const [ accountDetails, setAccountDetails ] = useState({username: '', password: ''}); //put useParams as username
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    //clean up function to remove guest info on page exit/refresh
+    return () => {
+      const database = getDatabase(firebaseConfig);
+      const databaseRef = ref(database, `/guest`);
+      remove(databaseRef);
+      setAccountDetails({username: '', password: ''});
+    }
+  }, []);
+
+  useEffect(() => {
+    const database = getDatabase(firebaseConfig);
+    const databaseRef = ref(database, `/${accountDetails.username}`);
+    const childRef = ref(database, `/${accountDetails.username}/account`);
+
+    if (accountDetails.username && accountDetails.username!== 'guest') {
+      //check if username and password are already stored in account details in firebase, if not, add it, if so, don't add it
+      get(child(databaseRef, 'account')).then((snapshot) => {
+        if (!snapshot.exists()) {
+            push(childRef, accountDetails);
+        }
+      }).catch((error) => {
+        alert('Oh no! Something went wrong!');
+      });
+
+    // make sure loggedIn state matches with accountDetails state on page refresh
+      setLoggedIn(true);
+    } 
+  }, [accountDetails])
 
   // save search parameters inputted by user into a stateful variable
   const getQueryParams = (event, userInput) => {
@@ -44,7 +88,6 @@ function App() {
 
   // save number of results in a stateful variable to be used in API call when user clicks next/previous page
   const handleResultPages = (nextPage) => {
-    // setNumResults(number);
     if (nextPage) {
       setNumResults(numResults + 10)
     } else {
@@ -53,7 +96,7 @@ function App() {
     setNewSearch(false);
   }
 
-  // call the API based on user input
+  // call the API based on user input 
   useEffect (() => {
     if (apiQuery) {
       setShowLoading(true);
@@ -80,26 +123,31 @@ function App() {
         });
 
         res.data.records.forEach((object) => {
-          if (favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)) {
-            modifiedApiData.push({...object, favStatus: true, savedStatus: true});
-          } else if (!favListDoiArray.includes(object.doi) && !savedListDoiArray.includes(object.doi)) {
-            modifiedApiData.push({...object, favStatus: false, savedStatus: false});
-          } else if (favListDoiArray.includes(object.doi) && !savedListDoiArray.includes(object.doi)) {
-            modifiedApiData.push({...object, favStatus: true, savedStatus: false});
-          } else if (!favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)) {
-            modifiedApiData.push({...object, favStatus: false, savedStatus: true});
-          } else {
-            console.log("there's another condition!")
+          object = {...object, uuid: uuid()};
+          switch (true) {
+            case (favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)): 
+              modifiedApiData.push({...object, favStatus: true, savedStatus: true});
+              break;
+            case (!favListDoiArray.includes(object.doi) && !savedListDoiArray.includes(object.doi)):
+              modifiedApiData.push({...object, favStatus: false, savedStatus: false});
+              break;
+            case (favListDoiArray.includes(object.doi) && !savedListDoiArray.includes(object.doi)):
+              modifiedApiData.push({...object, favStatus: true, savedStatus: false});
+              break;
+            case (!favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)):
+              modifiedApiData.push({...object, favStatus: false, savedStatus: true});
+              break;
+            default: alert('Something went wrong');
           }
         })
         setPublications(modifiedApiData);
         setShowLoading(false);
-        console.log(publications);
       }).catch(() => {
         alert('Oh no - something went wrong! Please try again later :( ');
         setShowLoading(true);
       });
     } 
+    // eslint-disable-next-line
   }, [apiQuery, numResults]);
 
   //********************************
@@ -110,11 +158,12 @@ function App() {
   useEffect(() => {
     getFirebaseData('favourites');
     getFirebaseData('saved');
-  }, []);
+    // eslint-disable-next-line
+  }, [accountDetails.username]);
 
   const getFirebaseData = (location) => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/demo/${location}`);
+    const databaseRef = ref(database, `/${accountDetails.username}/${location}`);
     onValue(databaseRef, (response) => {
       const newState = [];
       const data = response.val();
@@ -127,7 +176,7 @@ function App() {
         setSavedList(newState);
       }
     });
-  }
+  };
   
   // add/remove items from firebase based on button click
   const handleLikeOrSave = (location, publication) => {
@@ -167,14 +216,14 @@ function App() {
   // remove item from firebase
   const removeFromFirebase = (location, removalKey) => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/demo/${location}/${removalKey}`);
+    const databaseRef = ref(database, `/${accountDetails.username}/${location}/${removalKey}`);
     remove(databaseRef);
   }
 
   // add item to firebase
   const addToFirebase = (location, publication) => {
     const database = getDatabase(firebaseConfig);
-    const databaseRef = ref(database, `/demo/${location}`);
+    const databaseRef = ref(database, `/${accountDetails.username}/${location}`);
     push(databaseRef, publication);
   }
 
@@ -182,78 +231,118 @@ function App() {
   // FIREBASE
   //********************************
 
+  const handleHomeNavigation = () => {
+    if (accountDetails.username === 'guest') {
+      setAccountDetails({username:'', password:''});
+      navigate('/');
+    } else if (accountDetails.username) {
+      navigate(`/${accountDetails.username}`);
+    }
+  }
+
+  const context = {
+    accountDetails:accountDetails,
+    setAccountDetails:setAccountDetails,
+    favList:favList,
+    handleLikeOrSave:handleLikeOrSave,
+    savedList:savedList,
+    getQueryParams:getQueryParams,
+    publications:publications,
+    handleResultPages:handleResultPages,
+    setNewSearch:setNewSearch,
+    newSearch:newSearch, 
+    numResults:numResults, 
+    showLoading:showLoading, 
+    apiQuery:apiQuery,
+    }
+
+
   return (
     <>
+
+
     <main>
       <header className='wrapper'>
-        <Link className='h1Container' to='/'>
+        {
+          loggedIn
+            ?<button className='loginButton smallFont' onClick={() => {setLoggedIn(false); setAccountDetails({username:'', password:''}); navigate('/');}}>Log Out</button>
+            :<button className='loginButton smallFont' onClick={() => {navigate('/login')}} >Log In / Sign Up</button>
+        }
+
+        <button className='h1Container' onClick={() => handleHomeNavigation()}>
           <div className='logoContainer'>
             <img src={logo} alt='illustration of three test tubes' />
           </div>
           <h1>SciLib</h1>
-        </Link>
-        
-        <div className="about">
-          <p>Welcome to SciLib - a library to browse and save your favourite scientific literature from Springer Open Access! To get started, simply select a subject of interest from the dropdown menu to see recent papers related to that subject. To find a specific paper, try the Advanced Search option. </p>
-          <p>Happy reading!</p>
-        </div>
-        
+        </button>
+        {
+          accountDetails.username
+            ? accountDetails.username !== 'guest'
+              ?<div className='welcomeMessage'>
+                <h2>Welcome {accountDetails.username}!</h2>
+                <p>What would you like to read about today?</p>
+                </div>
+              :<div className='guestMessage'>
+                <p>Welcome! You are using a guest account.</p>
+                <p> To get started, simply select a subject of interest from the dropdown menu to see recent papers related to that subject. To find a specific paper, try the Advanced Search option.</p>
+                <p>To save your papers for future sessions, please </p>
+                <Link className='account' to='/login'>Log In / Sign Up.</Link>
+                </div>
+            :null
+        }
       </header>
 
       <section className='wrapper'>
-        <div className='pageSelection'>
-          <Link className="page search" to="/">
-            <i className="fa-solid fa-magnifying-glass"></i>
-            <h3>Search</h3>
-          </Link> 
-          <Link className="page favourites" to='/favourites'>
-            <i className="fa-solid fa-heart"></i>
-            <h3>Favourites (
-                {
-                  favList.length - 1>= 0
-                    ? (favList.length - 1)
-                    : null
-                }
-              )</h3>
-          </Link>
-          <Link className="page saved" to='/saved'>
-            <i className='fa-solid fa-bookmark'></i>
-            <h3>Saved (
-              {
-                  savedList.length - 1>= 0
-                    ? (savedList.length - 1)
-                    : null
-                }
-              )</h3>
-          </Link>
-        </div>
-      </section>
 
+
+        {
+          accountDetails.username
+            ? <>
+                <div className='pageSelection'>
+                  <Link className="page search" to={`/${accountDetails.username}`}>
+                    <i className="fa-solid fa-magnifying-glass"></i>
+                    <h3>Search</h3>
+                  </Link> 
+                  <Link className="page favourites" to={`/${accountDetails.username}/favourites`}>
+                    <i className="fa-solid fa-heart"></i>
+                    <h3>Fav<span className='fullWord'>ourites</span> (
+                        {
+                          favList.length >= 0
+                            ? (favList.length)
+                            : null
+                        }
+                      )</h3>
+                  </Link>
+                  <Link className="page saved" to={`/${accountDetails.username}/saved`}>
+                    <i className='fa-solid fa-bookmark'></i>
+                    <h3>Saved (
+                      {
+                          savedList.length >= 0
+                            ? (savedList.length)
+                            : null
+                        }
+                      )</h3>
+                  </Link>
+                </div>
+              </>
+            : null
+        }
+      </section>
+    
+    <MainContext.Provider value={context} >
       <Routes>
-        <Route path='/' element={ <SearchPage 
-          getQueryParams={getQueryParams} 
-          publications={publications} 
-          handleLikeOrSave={handleLikeOrSave} 
-          handleResultPages={handleResultPages} 
-          favList={favList}
-          savedList={savedList}
-          setNewSearch={setNewSearch}
-          newSearch={newSearch} 
-          numResults={numResults} 
-          showLoading={showLoading} 
-          apiQuery={apiQuery}/> } />
-        <Route path='/favourites' element={ <FavouritePage 
-          favList={favList}
-          handleLikeOrSave={handleLikeOrSave}
-          savedList={savedList} /> } />
-        <Route path='/saved' element={ <SavedPage 
-          favList={favList}
-          handleLikeOrSave={handleLikeOrSave}
-          savedList={savedList}/> } />
+        <Route path='/' element={ <LandingPage setAccountDetails={setAccountDetails} /> }></Route>
+        <Route path='/login' element={ <Login accountDetails={accountDetails} setAccountDetails={setAccountDetails} setLoggedIn={setLoggedIn}/> }></Route>
+        <Route path=':paramsUsername' element={ <SearchPage /> } />
+        <Route path={`/:paramsUsername/favourites`} element={ <FavouritePage /> } />
+        <Route path={`/:paramsUsername/saved`} element={ <SavedPage /> } />
+        <Route path={`/:paramsUsername/:doi`} element={ <SinglePaper />} />
         <Route path='*' element={ <Error404 /> } />
       </Routes>
+    </MainContext.Provider>
     </main>
-    <footer>Created by <a href='https://www.tinalu.ca/' target="_blank" rel="noreferrer">Tina Lu</a> at <a href='https://junocollege.com/' target="_blank" rel="noreferrer">Juno College</a></footer>
+
+    <footer className='smallFont'>Created by <a href='https://www.tinalu.ca/' target="_blank" rel="noreferrer">Tina Lu</a> at <a href='https://junocollege.com/' target="_blank" rel="noreferrer">Juno College</a></footer>
     </>
   );
 }

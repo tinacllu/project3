@@ -4,11 +4,13 @@
 @use './partials/baseStyles';
 
 @use './partials/header';
+@use './partials/login';
 @use './partials/navigation';
 @use './partials/searchForm';
 @use './partials/papers';
-@use './partials/footer';
+@use './partials/singlePaper';
 @use './partials/error';
 @use './partials/loading';
+@use './partials/footer';
 
 

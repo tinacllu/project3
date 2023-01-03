@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { MainContext } from '../App';
 
 const HeartIcon = ( {handleLikeOrSave, publication, favList} ) => {
     const [ liked, setLiked ] = useState(false);
@@ -15,11 +16,12 @@ const HeartIcon = ( {handleLikeOrSave, publication, favList} ) => {
         } else {
             setLiked(false);
         }
+        // eslint-disable-next-line
     }, [])
 
     return(
         // create a ternary for setLiked (use ternary and specifically say true or false instead)
-        <button onClick={() => {handleLikeOrSave('favourites', publication); setLiked(!liked)}}>
+        <button title='Favourite' onClick={() => {handleLikeOrSave('favourites', publication); setLiked(!liked)}}>
             {
                 liked
                     ? <i className="fa-solid fa-heart"></i>

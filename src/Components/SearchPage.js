@@ -2,7 +2,19 @@ import SearchForm from './SearchForm';
 import Papers from './Papers';
 import ChangePage from './ChangePage';
 
-const SearchPage = ({ getQueryParams, publications, handleLikeOrSave, handleResultPages, favList, savedList, newSearch, setNewSearch, numResults, showLoading, apiQuery}) => {
+import { useContext, useEffect } from "react";
+import { MainContext } from '../App';
+import { useParams } from 'react-router-dom';
+
+const SearchPage = () => {
+    const { paramsUsername } = useParams();
+    const { publications, newSearch, numResults, showLoading, apiQuery, setAccountDetails, accountDetails}= useContext(MainContext);
+
+    useEffect(() => {
+        if (!accountDetails.username) {
+            setAccountDetails({...accountDetails, username: paramsUsername})
+        }
+    }, [accountDetails, paramsUsername, setAccountDetails]);
 
     return(
         <section className='searchPage wrapper'>
@@ -25,7 +37,7 @@ const SearchPage = ({ getQueryParams, publications, handleLikeOrSave, handleResu
                         <div className="dot"></div>
                     </div>)
                 : apiQuery
-                    ? <Papers publications={publications} handleLikeOrSave={handleLikeOrSave} favList={favList} savedList={savedList} />
+                    ? <Papers publications={publications}/>
                     : null
             }
             

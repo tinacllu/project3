@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { MainContext } from '../App';
 
 const SearchForm = ( {getQueryParams, setNewSearch} ) => {
 

@@ -1,13 +1,22 @@
 import Papers from "./Papers";
+import { useContext, useEffect } from "react";
+import { MainContext } from '../App';
+import { useParams } from "react-router-dom";
 
-const FavouritePage = ( { handleLikeOrSave, favList, savedList }) => {
+const FavouritePage = () => {
     const pubArray = [];
+    const { paramsUsername } = useParams();
+    const { favList, handleLikeOrSave, savedList, accountDetails, setAccountDetails }= useContext(MainContext);
 
-    // loop through each item that has been saved as favourite in firebase, and if its not the placeholder, then add it to pubArray and display to the page
+    useEffect(() => {
+        if (!accountDetails.username) {
+            setAccountDetails({...accountDetails, username: paramsUsername})
+        }
+    }, [accountDetails, paramsUsername, setAccountDetails]);
+
+    // loop through each item that has been saved as favourite in firebase, then add it to pubArray and display to the page
     favList.forEach((favItem)=> {
-       if (favItem.key !== 'placeholder') {
         pubArray.push({...favItem.name, favStatus: true}); 
-       }
     });
 
     return(
