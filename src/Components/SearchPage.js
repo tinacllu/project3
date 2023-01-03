@@ -2,11 +2,9 @@ import SearchForm from './SearchForm';
 import Papers from './Papers';
 import ChangePage from './ChangePage';
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { MainContext } from '../App';
-
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
 
 const SearchPage = () => {
     const { paramsUsername } = useParams();

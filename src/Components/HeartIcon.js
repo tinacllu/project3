@@ -22,7 +22,7 @@ const HeartIcon = ( {publication}) => {
 
     return(
         // create a ternary for setLiked (use ternary and specifically say true or false instead)
-        <button onClick={() => {handleLikeOrSave('favourites', publication); setLiked(!liked)}}>
+        <button title='Favourite' onClick={() => {handleLikeOrSave('favourites', publication); setLiked(!liked)}}>
             {
                 liked
                     ? <i className="fa-solid fa-heart"></i>

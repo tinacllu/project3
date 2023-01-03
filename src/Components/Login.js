@@ -9,8 +9,10 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
     const [ login, setLogin ] = useState(true);
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [ confirmPassword, setConfirmPassword ] = useState('');
     const [ validAccount, setValidAccount ] = useState(true);
     const [ validUsername, setValidUsername ] = useState(true);
+    const [ validPassword, setValidPassword ] = useState(true);
 
     const navigate = useNavigate();
 
@@ -30,6 +32,8 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
                     setValidAccount(true);
                     setLoggedIn(true);
                 } else {
+                    console.log(username, dbUsername, password, dbPassword)
+                    console.log('im the problem')
                     setValidAccount(false);
                 }
             }
@@ -53,10 +57,17 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
                     setValidAccount(false);
                 }
             } else {
-                setAccountDetails({username: username, password: password});
-                navigate(`/${username}`);
-                setValidAccount(true);
-                setLoggedIn(true);
+                if (password === confirmPassword) {
+                    setAccountDetails({username: username, password: password});
+                    navigate(`/${username}`);
+                    setValidAccount(true);
+                    setLoggedIn(true);
+                } else {
+                    console.log('help');
+                    setValidPassword(false);
+                    setValidAccount(true);
+                }
+
             }
         }).catch((error) => {
             alert('Oh no! Something went wrong!');
@@ -79,6 +90,7 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
 
         setUsername('');
         setPassword('');
+        setConfirmPassword('');
     }
 
     // check if username contains firebase incompatible characters
@@ -96,6 +108,11 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
                 <Link className='exit' to={`/${accountDetails.username}`}>
                     <i className="fa-solid fa-x"></i>
                 </Link>
+                {
+                    login
+                        ?<h3>Log In</h3>
+                        :<h3>Create an Account</h3>
+                }
                 <form onSubmit={(e) => {checkCredentials(e, username)}}>
                     <fieldset className='inputs'>
                         {
@@ -108,6 +125,15 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
 
                         <label htmlFor='password'>Password:</label>
                         <input type='password' id='password' minLength='6' required value={password} onChange={(e) => {setPassword(e.target.value)}}></input>
+
+                        {
+                            !login
+                                ? <>
+                                <label htmlFor='confirmPassword'>Confirm Password:</label>
+                                <input type='password' id='confirmPassword' minLength='6' required value={confirmPassword} onChange={(e) => {setConfirmPassword(e.target.value)}}></input>
+                                </>
+                                :null
+                        }
                     </fieldset>
                         {login
                             ? <button type='submit' className='submitLogin'>Log In</button>
@@ -121,6 +147,12 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
                     :null
                 }
 
+                {
+                    !login && !validPassword
+                        ?<p className='errorMessage smallFont'>*Passwords do not match. Please confirm your password.</p>
+                        :null
+                }
+
                 {login
                     ?<div className='switch smallFont'>
                         <p>Don't have an account?</p>
@@ -128,7 +160,7 @@ const Login = ( { accountDetails, setAccountDetails, setLoggedIn } ) => {
                     </div>
                     :<div className='switch smallFont'>
                         <p>Already have an account?</p>
-                        <button onClick={() => {setLogin(!login); setValidAccount(true)}}>Log In</button>
+                        <button onClick={() => {setLogin(!login); setValidAccount(true); setValidPassword(true)}}>Log In</button>
                     </div>}
             </div>
         </section>

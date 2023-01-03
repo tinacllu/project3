@@ -9,6 +9,7 @@ import SavedPage from './Components/SavedPage'
 import Error404 from './Components/Error404';
 import Login from './Components/Login';
 import LandingPage from './Components/LandingPage';
+import SinglePaper from './Components/SinglePaper';
 
 // firebase
 import firebaseConfig from './Components/Firebase';
@@ -18,6 +19,7 @@ import { getDatabase, ref, onValue, push, remove, get, child} from 'firebase/dat
 import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
 import { Link, Routes, Route, useNavigate } from 'react-router-dom';
+import uuid from 'react-uuid';
 
 export const MainContext = createContext();
 
@@ -45,6 +47,7 @@ const Main = () => {
       const database = getDatabase(firebaseConfig);
       const databaseRef = ref(database, `/guest`);
       remove(databaseRef);
+      setAccountDetails({username: '', password: ''});
     }
   }, []);
 
@@ -66,7 +69,6 @@ const Main = () => {
     // make sure loggedIn state matches with accountDetails state on page refresh
       setLoggedIn(true);
     } 
-
   }, [accountDetails])
 
   // save search parameters inputted by user into a stateful variable
@@ -121,6 +123,7 @@ const Main = () => {
         });
 
         res.data.records.forEach((object) => {
+          object = {...object, uuid: uuid()};
           switch (true) {
             case (favListDoiArray.includes(object.doi) && savedListDoiArray.includes(object.doi)): 
               modifiedApiData.push({...object, favStatus: true, savedStatus: true});
@@ -331,15 +334,13 @@ const Main = () => {
       <Routes>
         <Route path='/' element={ <LandingPage setAccountDetails={setAccountDetails} /> }></Route>
         <Route path='/login' element={ <Login accountDetails={accountDetails} setAccountDetails={setAccountDetails} setLoggedIn={setLoggedIn}/> }></Route>
-        {/* <Route path={`/${accountDetails.username}`} element={ <SearchPage /> } />
-        <Route path={`/${accountDetails.username}/favourites`} element={ <FavouritePage /> } />
-        <Route path={`/${accountDetails.username}/saved`} element={ <SavedPage /> } /> */}
         <Route path=':paramsUsername' element={ <SearchPage /> } />
         <Route path={`/:paramsUsername/favourites`} element={ <FavouritePage /> } />
         <Route path={`/:paramsUsername/saved`} element={ <SavedPage /> } />
+        <Route path={`/:paramsUsername/:doi`} element={ <SinglePaper />} />
         <Route path='*' element={ <Error404 /> } />
       </Routes>
-      </MainContext.Provider>
+    </MainContext.Provider>
     </main>
 
     <footer className='smallFont'>Created by <a href='https://www.tinalu.ca/' target="_blank" rel="noreferrer">Tina Lu</a> at <a href='https://junocollege.com/' target="_blank" rel="noreferrer">Juno College</a></footer>

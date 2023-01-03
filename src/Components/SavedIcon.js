@@ -21,7 +21,7 @@ const SavedIcon = ( {publication} ) => {
     }, []);
 
     return(
-        <button onClick={() => {handleLikeOrSave('saved', publication); setSaved(!saved)}}>
+        <button title='Save' onClick={() => {handleLikeOrSave('saved', publication); setSaved(!saved)}}>
             {
                 saved 
                     ? <i className="fa-solid fa-bookmark"></i>

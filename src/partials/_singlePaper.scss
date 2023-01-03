@@ -1,0 +1,11 @@
+.singlePaper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    background-color: rgb(32, 67, 120, 0.75);
+}
