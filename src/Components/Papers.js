@@ -3,7 +3,7 @@ import Abstract from './Abstract';
 import Authors from './Authors';
 import HeartIcon from './HeartIcon';
 import SavedIcon from './SavedIcon';
-import NotesIcon from './NotesIcon';
+// import NotesIcon from './NotesIcon';
 
 const Papers = ({publications}) => {
     const [ displayAbstract, setDisplayAbstract ] = useState(false);
@@ -42,7 +42,7 @@ const Papers = ({publications}) => {
                             <div className='icons'>
                                 <HeartIcon publication={publication} />
                                 <SavedIcon publication={publication} />
-                                <NotesIcon publication={publication} />
+                                {/* <NotesIcon publication={publication} /> */}
                             </div>
                         </div>
                         {
