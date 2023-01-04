@@ -32,7 +32,7 @@ const SinglePaper = ( ) => {
             const data = response.val();
             for (let key in data) {
                 console.log(data[key], key, 'marioo')
-                newState.push({note:data[key], key: key});
+                newState.push({note:data[key]['note'], key: key});
                 setNotes(newState);
             }
         });
@@ -41,7 +41,7 @@ const SinglePaper = ( ) => {
     const handleAddNotes = (e) => {
         e.preventDefault();
         setTextArea('');
-        push(dbRef, textArea);
+        push(dbRef, {note: textArea});
     }
 
     return (
@@ -70,7 +70,7 @@ const SinglePaper = ( ) => {
                 {
 
                     notes.map((note) => {
-                        return <Note note={note} filteredDoi={filteredDoi} />
+                        return <Note key={note.key} note={note} filteredDoi={filteredDoi} />
                     })
                 }
             </ul>

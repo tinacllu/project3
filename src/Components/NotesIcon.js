@@ -1,19 +1,42 @@
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { MainContext } from '../App';
 
-const NotesIcon = ( { publication }) => {
-    // const { handleLikeOrSave, favList, savedList }= useContext(MainContext);
-    const { paramsUsername } = useParams();
+import firebaseConfig from './Firebase';
+import { getDatabase, ref, child, get } from 'firebase/database';
 
-    // save a notes section in firebase using uuid as key
-    // 
+const NotesIcon = ( { publication }) => {
+  const { accountDetails } = useContext(MainContext);
+  const { paramsUsername } = useParams();
+  const [ hasNotes, setHasNotes ] = useState(false);
+
+  useEffect(() => {
+    const regex = /[^A-Za-z0-9]/g;
+    const filteredDoi = publication.doi.replace(regex, '');
+
+    const database = getDatabase(firebaseConfig);
+    const dbRef = ref(database, `/${accountDetails.username}/notes`);
+    get(child(dbRef, `${filteredDoi}`)).then((snapshot) => {
+      console.log('hi')
+      if (snapshot.exists()) {
+          setHasNotes(true);
+      } else {
+        setHasNotes(false);
+      }
+    }).catch((error) => {
+      alert('Oh no! Something went wrong!');
+    });
+  }, []);
+
   return (
-    // <Link to={`/${paramsUsername}/${publication.uuid}`} state={{ from: 'notesIcon', publication: publication, handleLikeOrSave: handleLikeOrSave, favList: favList, savedList: savedList }}>
     <Link to={`/${paramsUsername}/${publication.uuid}`} state={{ from: 'notesIcon', publication: publication }}>
         <button title='Notes'>
-            <i className="fa-regular fa-note-sticky"></i>
+          {
+            hasNotes
+              ? <i className="fa-solid fa-note-sticky"></i>
+              : <i className="fa-regular fa-note-sticky"></i>
+          }
         </button>
     </Link>
   )

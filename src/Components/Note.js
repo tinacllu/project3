@@ -16,7 +16,8 @@ const Note = ( { note, filteredDoi } ) => {
     const handleEdit = (e) => {
         e.preventDefault();
         setEditMode(false);
-        // update(dbRef, {editNote});
+        update(dbRef, {note: editNote});
+        setEditNote('');
     }
 
     const handleDelete = () => {
@@ -25,7 +26,7 @@ const Note = ( { note, filteredDoi } ) => {
     }
 
     return (
-        <li key={note.key}>
+        <li>
         {
             editMode
                 ? <form onSubmit={(e) => {handleEdit(e)}}>
