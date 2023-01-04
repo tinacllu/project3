@@ -26,7 +26,7 @@ const SavedPage = () => {
                         <p>No saved items yet!</p> 
                         <p>Browse some papers and use the bookmark icon to add them to your saved list 🔖</p>
                         </div>)
-                    :<Papers publications={pubArray} handleLikeOrSave={handleLikeOrSave} favList={favList} savedList={savedList}/>
+                    :<Papers publications={pubArray} />
             }
         </section>
     )

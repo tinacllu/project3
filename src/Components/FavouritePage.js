@@ -28,7 +28,7 @@ const FavouritePage = () => {
                         <p>No favourites yet!</p> 
                         <p>Browse some papers and use the heart icon to add them to your favourites list ❤</p>
                         </div>)
-                    :<Papers publications={pubArray} handleLikeOrSave={handleLikeOrSave} favList={favList} savedList={savedList}/>
+                    :<Papers publications={pubArray} />
             }
         </section>
     )

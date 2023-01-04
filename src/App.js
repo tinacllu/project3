@@ -24,10 +24,11 @@ import uuid from 'react-uuid';
 export const MainContext = createContext();
 
 //TODOS
-//custom hooks to clean up App.js
+// custom hooks to clean up App.js
 // fix deployment errors on netlify
 
 const App = () => {
+  const database = getDatabase(firebaseConfig);
 
   const [ publications, setPublications ] = useState([]);
   const [ apiQuery, setApiQuery ] = useState('');
@@ -44,7 +45,6 @@ const App = () => {
   useEffect(() => {
     //clean up function to remove guest info on page exit/refresh
     return () => {
-      const database = getDatabase(firebaseConfig);
       const databaseRef = ref(database, `/guest`);
       remove(databaseRef);
       setAccountDetails({username: '', password: ''});
@@ -52,7 +52,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/${accountDetails.username}`);
     const childRef = ref(database, `/${accountDetails.username}/account`);
 
@@ -162,7 +161,6 @@ const App = () => {
   }, [accountDetails.username]);
 
   const getFirebaseData = (location) => {
-    const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/${accountDetails.username}/${location}`);
     onValue(databaseRef, (response) => {
       const newState = [];
@@ -215,14 +213,12 @@ const App = () => {
 
   // remove item from firebase
   const removeFromFirebase = (location, removalKey) => {
-    const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/${accountDetails.username}/${location}/${removalKey}`);
     remove(databaseRef);
   }
 
   // add item to firebase
   const addToFirebase = (location, publication) => {
-    const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/${accountDetails.username}/${location}`);
     push(databaseRef, publication);
   }
