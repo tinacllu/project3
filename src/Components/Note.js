@@ -8,7 +8,7 @@ import { getDatabase, ref, remove, update } from 'firebase/database';
 const Note = ( { note, filteredDoi } ) => {
     const { accountDetails } = useContext(MainContext);
     const [ editMode, setEditMode ] = useState(false);
-    const [ editNote, setEditNote ] = useState('');
+    const [ editNote, setEditNote ] = useState(note.note);
 
     const database = getDatabase(firebaseConfig);
     const dbRef = ref(database, `/${accountDetails.username}/notes/${filteredDoi}/${note.key}`);
@@ -22,23 +22,24 @@ const Note = ( { note, filteredDoi } ) => {
 
     const handleDelete = () => {
         remove(dbRef);
-        console.log('deleted');
     }
 
     return (
-        <li>
-        {
-            editMode
-                ? <form onSubmit={(e) => {handleEdit(e)}}>
-                    <input type='text' placeholder={note.note} value={editNote} onChange={(e) => setEditNote(e.target.value)}></input>
-                    <button><i className="fa-solid fa-check"></i></button>
+        <li className='note'>
+            {
+                editMode
+                    ? <form className='editNote' onSubmit={(e) => {handleEdit(e)}}>
+                        <textarea placeholder={note.note} value={editNote} onChange={(e) => setEditNote(e.target.value)}></textarea>
+                        <button><i className="fa-solid fa-check"></i></button>
                     </form>
-                : <>
-                    <i className="fa-solid fa-pen" onClick={() => setEditMode(true)}></i>
-                    <i className="fa-solid fa-trash" onClick={() => handleDelete()}></i>
+                    : <>
                     {note.note}
-                </>
-        }
+                    <div className="icons">
+                        <i className="fa-solid fa-pen" onClick={() => {setEditMode(true); setEditNote(note.note)}}></i>
+                        <i className="fa-solid fa-trash" onClick={() => handleDelete()}></i>
+                    </div>
+                    </>
+            }
         </li>
     )
 }

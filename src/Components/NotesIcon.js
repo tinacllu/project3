@@ -17,8 +17,8 @@ const NotesIcon = ( { publication }) => {
 
     const database = getDatabase(firebaseConfig);
     const dbRef = ref(database, `/${accountDetails.username}/notes`);
+
     get(child(dbRef, `${filteredDoi}`)).then((snapshot) => {
-      console.log('hi')
       if (snapshot.exists()) {
           setHasNotes(true);
       } else {
@@ -27,6 +27,7 @@ const NotesIcon = ( { publication }) => {
     }).catch((error) => {
       alert('Oh no! Something went wrong!');
     });
+    
   }, []);
 
   return (

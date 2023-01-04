@@ -1,3 +1,6 @@
+@use './variables' as *;
+@use './mixins';
+
 .singlePaper {
     display: flex;
     flex-direction: column;
@@ -5,7 +8,101 @@
     justify-content: center;
     min-height: 100vh;
     width: 100vw;
-    position: fixed;
+    position: absolute;
     top: 0;
-    background-color: rgb(32, 67, 120, 0.75);
+    background-color: $darkBlue;
+    .paperContainer {
+        margin: 30px;
+        background-color: $lightBlue;
+        border-radius: 10px;
+    }
+    .exit {
+        align-self: flex-end;
+        padding: 20px;
+        color: $darkGray;
+    }
+}
+
+.notesHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 90%;
+    .notesHeaderMain {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .logo {
+        font-size: 3rem;
+        padding: 0;
+    }
+    form {
+        margin: 15px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        textarea {
+            all: unset;
+            background-color: white;
+            border-radius: 10px;
+            padding: 10px;
+            resize: none;
+            &:hover, &:focus {
+                box-shadow: 0px 0px 5px 4px rgba($darkBlue, 0.25);
+            }
+        }
+    }
+}
+
+.notesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 90%;
+    margin: 20px 0;
+    .note {
+        width: 100%;
+        min-width: 100px;
+        display: flex;
+        flex-direction: row;
+        padding: 20px;
+        justify-content: space-between;
+    }
+    .icons {
+        display: flex;
+        flex-direction: column;
+        i {
+            margin-bottom: 10px;
+            &:hover, &:focus {
+                cursor: pointer;
+            }
+        }
+    }
+    .editNote {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+        textarea {
+            all: unset;
+            background-color: white;
+            border: 2px solid rgba($darkBlue, 0.25);
+            border-radius: 10px;
+            padding: 10px;
+            resize: none;
+            width: 85%;
+            &:hover, &:focus {
+                box-shadow: 0px 0px 5px 4px rgba($darkBlue, 0.25);
+            }
+        }
+        button {
+            max-width: 10%;
+            height: 40px;
+            width: 40px;
+            background-color: $darkGray;
+            padding: 0;
+            margin-left: 5px;
+        }
+    }
 }

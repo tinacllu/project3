@@ -27,14 +27,19 @@ const SinglePaper = ( ) => {
     const dbRef = ref(database, `/${accountDetails.username}/notes/${filteredDoi}`);
 
     useEffect(() => {
+
         onValue(dbRef, (response) => {
             const newState = [];
             const data = response.val();
-            for (let key in data) {
-                console.log(data[key], key, 'marioo')
-                newState.push({note:data[key]['note'], key: key});
-                setNotes(newState);
+            if (data) {
+                for (let key in data) {
+                    newState.push({note:data[key]['note'], key: key});
+                    setNotes(newState);
+                }
+            } else {
+                setNotes([]);
             }
+            
         });
     }, []);
 
@@ -42,38 +47,49 @@ const SinglePaper = ( ) => {
         e.preventDefault();
         setTextArea('');
         push(dbRef, {note: textArea});
-    }
+    };
 
     return (
         <section className="singlePaper">
-            <Link className='exit' to={`/${accountDetails.username}`}>
-                <i className="fa-solid fa-x"></i>
-            </Link>
-            <Papers publications={[publication]}/>
-            {
-                addNote
-                    ? <>
-                    <button title='Minimize' onClick={() => setAddNote(false)}>
-                        <i className="fa-solid fa-minus"></i>
-                    </button>
-                    <form onSubmit={(e) => {handleAddNotes(e)}}>
-                        <label htmlFor='note'>Add Note:</label>
-                        <textarea id='note' rows='4' cols='20' value={textArea} onChange={(e) => {setTextArea(e.target.value)}}></textarea>
-                        <button type='submit'>Add!</button>
-                    </form>
-                    </>
-                    : <button title='Add Note' onClick={() => setAddNote(true)}>
-                        <i className="fa-regular fa-plus"></i>
-                    </button>
-            }
-            <ul className="notesContainer">
-                {
+            <div className="paperContainer">
+                <Link className='exit' to={`/${accountDetails.username}`}>
+                    <i className="fa-solid fa-x"></i>
+                </Link>
+                <Papers publications={[publication]}/>
+                
+                <div className="notesHeader">
+                    <div className="notesHeaderMain">
+                        <h3 className='logo'>Notes</h3>
+                        {
+                            addNote 
+                                ?<button title='Minimize' onClick={() => setAddNote(false)}>
+                                    <i className="fa-solid fa-minus"></i>
+                                </button>
+                                :<button title='Add Note' onClick={() => setAddNote(true)}>
+                                    <i className="fa-regular fa-plus"></i>
+                                </button>
+                        }
+                    </div>
+                    {
+                        addNote
+                            ? 
+                            <form onSubmit={(e) => {handleAddNotes(e)}}>
+                                <label htmlFor='note'>Add Note:</label>
+                                <textarea id='note' rows='4' cols='20' value={textArea} onChange={(e) => {setTextArea(e.target.value)}}></textarea>
+                                <button type='submit'>Add!</button>
+                            </form>
+                            : null
+                    }
+                </div>
+                <ul className="notesContainer">
+                    {
 
-                    notes.map((note) => {
-                        return <Note key={note.key} note={note} filteredDoi={filteredDoi} />
-                    })
-                }
-            </ul>
+                        notes.map((note) => {
+                            return <Note key={note.key} note={note} filteredDoi={filteredDoi} />
+                        })
+                    }
+                </ul>
+            </div>
         </section>
   )
 }
