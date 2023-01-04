@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
 import { MainContext } from '../App';
 
-const SavedIcon = ({handleLikeOrSave, publication, savedList}) => {
+const SavedIcon = ( {publication}) => {
     const [ saved, setSaved ] = useState(false);
+    const {handleLikeOrSave, savedList} = useContext(MainContext);
 
     //if the publication is in fav list, then set saved to true, else set saved to false
     useEffect(() => {

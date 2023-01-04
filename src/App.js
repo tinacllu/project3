@@ -336,7 +336,7 @@ const App = () => {
         <Route path=':paramsUsername' element={ <SearchPage /> } />
         <Route path={`/:paramsUsername/favourites`} element={ <FavouritePage /> } />
         <Route path={`/:paramsUsername/saved`} element={ <SavedPage /> } />
-        <Route path={`/:paramsUsername/:doi`} element={ <SinglePaper />} />
+        {/* <Route path={`/:paramsUsername/:doi`} element={ <SinglePaper />} /> */}
         <Route path='*' element={ <Error404 /> } />
       </Routes>
     </MainContext.Provider>
