@@ -27,8 +27,8 @@ const NotesIcon = ( { publication }) => {
     }).catch((error) => {
       alert('Oh no! Something went wrong!');
     });
-    
-  }, []);
+
+  }, [accountDetails.username, publication.doi]);
 
   return (
     <Link to={`/${paramsUsername}/${publication.uuid}`} state={{ from: 'notesIcon', publication: publication }}>

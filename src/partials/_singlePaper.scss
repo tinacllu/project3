@@ -98,8 +98,8 @@
         }
         button {
             max-width: 10%;
-            height: 40px;
-            width: 40px;
+            min-height: 40px;
+            min-width: 40px;
             background-color: $darkGray;
             padding: 0;
             margin-left: 5px;

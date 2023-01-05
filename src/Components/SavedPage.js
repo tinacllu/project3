@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 const SavedPage = () => {
     const pubArray = [];
     const { paramsUsername } = useParams();
-    const { favList, handleLikeOrSave, savedList, setAccountDetails, accountDetails }= useContext(MainContext);
+    const { savedList, setAccountDetails, accountDetails }= useContext(MainContext);
 
     useEffect(() => {
         if (!accountDetails.username) {

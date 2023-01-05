@@ -49,6 +49,7 @@ const App = () => {
       remove(databaseRef);
       setAccountDetails({username: '', password: ''});
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -68,6 +69,7 @@ const App = () => {
     // make sure loggedIn state matches with accountDetails state on page refresh
       setLoggedIn(true);
     } 
+    // eslint-disable-next-line
   }, [accountDetails])
 
   // save search parameters inputted by user into a stateful variable
@@ -333,7 +335,7 @@ const App = () => {
         <Route path=':paramsUsername' element={ <SearchPage /> } />
         <Route path={`/:paramsUsername/favourites`} element={ <FavouritePage /> } />
         <Route path={`/:paramsUsername/saved`} element={ <SavedPage /> } />
-        <Route path={`/:paramsUsername/:doi`} element={ <SinglePaper />} />
+        <Route path={`/:paramsUsername/:uuid`} element={ <SinglePaper />} />
         <Route path='*' element={ <Error404 /> } />
       </Routes>
     </MainContext.Provider>

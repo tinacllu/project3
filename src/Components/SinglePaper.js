@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useParams } from 'react-router-dom';
 
 import { MainContext } from '../App';
 import Note from './Note';
@@ -15,6 +15,8 @@ const SinglePaper = ( ) => {
 
     const location = useLocation();
     const { publication } = location.state;
+    const { paramsTab } = useParams();
+    console.log(paramsTab);
 
     const [ addNote, setAddNote ] = useState(false);
     const [ textArea, setTextArea ] = useState('');
@@ -27,7 +29,6 @@ const SinglePaper = ( ) => {
     const dbRef = ref(database, `/${accountDetails.username}/notes/${filteredDoi}`);
 
     useEffect(() => {
-
         onValue(dbRef, (response) => {
             const newState = [];
             const data = response.val();
@@ -41,6 +42,7 @@ const SinglePaper = ( ) => {
             }
             
         });
+        // eslint-disable-next-line
     }, []);
 
     const handleAddNotes = (e) => {

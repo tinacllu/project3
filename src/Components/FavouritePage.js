@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 const FavouritePage = () => {
     const pubArray = [];
     const { paramsUsername } = useParams();
-    const { favList, handleLikeOrSave, savedList, accountDetails, setAccountDetails }= useContext(MainContext);
+    const { favList, accountDetails, setAccountDetails }= useContext(MainContext);
 
     useEffect(() => {
         if (!accountDetails.username) {
