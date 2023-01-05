@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 const SavedPage = () => {
     const pubArray = [];
     const { paramsUsername } = useParams();
-    const { favList, handleLikeOrSave, savedList, setAccountDetails, accountDetails }= useContext(MainContext);
+    const { savedList, setAccountDetails, accountDetails }= useContext(MainContext);
 
     useEffect(() => {
         if (!accountDetails.username) {
@@ -26,7 +26,7 @@ const SavedPage = () => {
                         <p>No saved items yet!</p> 
                         <p>Browse some papers and use the bookmark icon to add them to your saved list 🔖</p>
                         </div>)
-                    :<Papers publications={pubArray} handleLikeOrSave={handleLikeOrSave} favList={favList} savedList={savedList}/>
+                    :<Papers publications={pubArray} />
             }
         </section>
     )
