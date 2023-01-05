@@ -15,6 +15,11 @@ This project was completed in November 2022 at Juno College's Web Development Bo
 - Functional programming
 - Environmental variables
 
+Features include: 
+- Basic and advanced search options
+- Login/Account creation with persistent data
+- Save and Favourite publications for later reading
+- Notes feature to remember all the important details 
+
 ✨ Stay tuned for additional features including: ✨
-- Create an account/LogIn to curate your personal lists
 - Sort feature for your favourites and saved lists
