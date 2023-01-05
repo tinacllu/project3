@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext, useState } from 'react';
-import { useLocation, Link, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { MainContext } from '../App';
 import Note from './Note';
@@ -15,8 +15,7 @@ const SinglePaper = ( ) => {
 
     const location = useLocation();
     const { publication } = location.state;
-    const { paramsTab } = useParams();
-    console.log(paramsTab);
+    const navigate = useNavigate();
 
     const [ addNote, setAddNote ] = useState(false);
     const [ textArea, setTextArea ] = useState('');
@@ -54,9 +53,9 @@ const SinglePaper = ( ) => {
     return (
         <section className="singlePaper">
             <div className="paperContainer">
-                <Link className='exit' to={`/${accountDetails.username}`}>
+                <button className='exit' onClick={() => navigate(-1)}>
                     <i className="fa-solid fa-x"></i>
-                </Link>
+                </button>
                 <Papers publications={[publication]}/>
                 
                 <div className="notesHeader">
