@@ -325,7 +325,6 @@ const App = () => {
               </>
             : null
         }
-        
       </section>
     
     <MainContext.Provider value={context} >

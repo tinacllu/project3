@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { MainContext } from '../App';
 
-const SearchForm = () => {
+const SearchForm = ( ) => {
     const { getQueryParams, setNewSearch } = useContext(MainContext);
 
     const [ showForm, setShowForm ] = useState(false);

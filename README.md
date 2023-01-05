@@ -1,19 +1,15 @@
-# SciLib 🧪📚
+# Getting Started with Create React App
 
-Live Link: https://scilib.netlify.app/
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## About
+## Available Scripts
 
-Science, but make it cute! Enjoy a fun interface while you browse through the deep archives of <a href='https://dev.springernature.com/'>Springer Open Access API </a>. (Open Access because science should not be behind a paywall!). Favourite or save your top papers for later!
+In the project directory, you can run:
 
-This project was completed in November 2022 at Juno College's Web Development Bootcamp ✨ Cohort 44 ✨, as part of a solo React project using React to showcase the following:
+### `npm start`
 
-- Core React concepts (state, props, components, app architecture)
-- Working with third-party API/data sources
-- Error handling
-- UI design
-- Functional programming
-- Environmental variables
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 Features include: 
 - Basic and advanced search options
@@ -23,3 +19,4 @@ Features include:
 
 ✨ Stay tuned for additional features including: ✨
 - Sort feature for your favourites and saved lists
+
