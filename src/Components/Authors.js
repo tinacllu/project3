@@ -15,8 +15,6 @@ const Authors = ( {publication} ) => {
         }
     }, [publication])
 
-
-
     return(
         <>
             <p><span className='bold'>Authors: </span>
