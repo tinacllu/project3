@@ -38,11 +38,11 @@ const SearchForm = ( ) => {
                             <option value='placeholder' disabled>Select a subject</option>
                             <option value='Anatomy'>Anatomy</option>
                             <option value='Biomedicine'>Biomedicine</option>
-                            {/* <option value='Bioinformatics'>Bioinformatics</option> */}
+                            <option value='Bioinformatics'>Bioinformatics</option>
                             <option value='Chemistry'>Chemistry</option>
                             <option value='Ecology'>Ecology</option>
                             <option value='Environment'>Environment</option>
-                            {/* <option value='Immunology'>Immunology</option> */}
+                            <option value='Immunology'>Immunology</option>
                             <option value='Mathematics'>Mathematics</option>
                             <option value='Microbiology'>Microbiology</option>
                             <option value='Neurology'>Neurology</option>
