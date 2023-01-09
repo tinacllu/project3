@@ -24,10 +24,11 @@ import uuid from 'react-uuid';
 export const MainContext = createContext();
 
 //TODOS
-//custom hooks to clean up App.js
+// custom hooks to clean up App.js
 // fix deployment errors on netlify
 
 const App = () => {
+  const database = getDatabase(firebaseConfig);
 
   const [ publications, setPublications ] = useState([]);
   const [ apiQuery, setApiQuery ] = useState('');
@@ -44,15 +45,14 @@ const App = () => {
   useEffect(() => {
     //clean up function to remove guest info on page exit/refresh
     return () => {
-      const database = getDatabase(firebaseConfig);
       const databaseRef = ref(database, `/guest`);
       remove(databaseRef);
       setAccountDetails({username: '', password: ''});
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/${accountDetails.username}`);
     const childRef = ref(database, `/${accountDetails.username}/account`);
 
@@ -69,6 +69,7 @@ const App = () => {
     // make sure loggedIn state matches with accountDetails state on page refresh
       setLoggedIn(true);
     } 
+    // eslint-disable-next-line
   }, [accountDetails])
 
   // save search parameters inputted by user into a stateful variable
@@ -162,7 +163,6 @@ const App = () => {
   }, [accountDetails.username]);
 
   const getFirebaseData = (location) => {
-    const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/${accountDetails.username}/${location}`);
     onValue(databaseRef, (response) => {
       const newState = [];
@@ -215,14 +215,12 @@ const App = () => {
 
   // remove item from firebase
   const removeFromFirebase = (location, removalKey) => {
-    const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/${accountDetails.username}/${location}/${removalKey}`);
     remove(databaseRef);
   }
 
   // add item to firebase
   const addToFirebase = (location, publication) => {
-    const database = getDatabase(firebaseConfig);
     const databaseRef = ref(database, `/${accountDetails.username}/${location}`);
     push(databaseRef, publication);
   }
@@ -336,7 +334,7 @@ const App = () => {
         <Route path=':paramsUsername' element={ <SearchPage /> } />
         <Route path={`/:paramsUsername/favourites`} element={ <FavouritePage /> } />
         <Route path={`/:paramsUsername/saved`} element={ <SavedPage /> } />
-        {/* <Route path={`/:paramsUsername/:doi`} element={ <SinglePaper />} /> */}
+        <Route path={`/:paramsUsername/:uuid`} element={ <SinglePaper />} />
         <Route path='*' element={ <Error404 /> } />
       </Routes>
     </MainContext.Provider>
